@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `better_power_schools` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `better_power_schools`;
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: better_power_schools
@@ -28,6 +30,7 @@ CREATE TABLE `assignments` (
   `Description` varchar(120) DEFAULT NULL,
   `CourseID` int(11) NOT NULL,
   `DueDate` varchar(45) NOT NULL,
+  `Grade` float DEFAULT NULL,
   PRIMARY KEY (`AssignmentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -191,4 +194,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-16 15:44:03
+-- Dump completed on 2018-03-18 18:32:20

@@ -1,3 +1,0 @@
-graft BetterPowerSchools/templates
-graft BetterPowerSchools/static
-include BetterPowerSchools/BetterPowerSchools.sql

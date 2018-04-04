@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if not session.logged_in %}
+    <h1 class="title">Home Screen</h1>
+    <h2 class="subtitle">Please log in first</h2>
+  {% endif %}
+
+  {% if session.logged_in %}
+    {% if session.role == "teacher" %}
+      <h1 class="title">Teacher Home Screen</h1>
+      <!--this is an example, put your stuff into this area for the teacher home screen-->
+      <h2 class="subtitle">Example Page</h2>
+      <ul>
+        {% for teacher in teachers %}
+              <p><b>Field 1:</b> {{ teacher[0] }}<br>
+                <b>Field 2:</b> {{ teacher[1] }}<br>
+                <b>Field 3:</b> {{ teacher[2] }}<br>
+                <b>Field 4:</b> {{ teacher[3] }}<br>
+                <b>Field 5:</b> {{ teacher[4] }}<br>
+                <b>Field 6:</b> {{ teacher[5] }}<br>
+                <b>Field 7:</b> {{ teacher[6] }}<br>
+                <b>Field 8:</b> {{ teacher[7] }}<br>
+                ----------------------------------------------</p>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endif %}
+{% endblock %}

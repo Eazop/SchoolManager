@@ -8,12 +8,16 @@
 {% block body %}
 <table>
 <tr>
-<!--Created Button-->
+<button name= "Create" type="button" onclick=alert("CREATE!") >Create Assignment</button
 </tr>
 <tr>
-<table>
-
-</table>
+{% for assignment in assignments %}
+	<table>
+	<tr><td>{{assignment[0]}}</td><td></td></tr>
+	<tr><td>{{assignment[4]}}</td><td></td></tr>
+	<tr><td>{% if assignment[5] %}{{assignment[5]}} {% else %} "Not Submited" {% endif %}</td><td></td></tr>
+	<tr><td></td><td> <button name="Modify" type="button" onclick=alert("MODIFY!")>Modify Assignment</button </td></tr>
+	</table>
 </tr>
 </table>
 {% endblock %}

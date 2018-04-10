@@ -8,7 +8,7 @@ from jinja2 import Template
 import pymysql
 
 app = Flask(__name__)
-t = None
+
 app.config.update(dict(
 DATABASE='',
 SECRET_KEY='development key',
@@ -22,11 +22,11 @@ def connect_db():
 
 @app.route('/', methods=['GET','POST'])
 def home():
-	db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
-	cur = db.cursor()
-	cur.execute('SELECT * FROM teachers')
-	teachers = cur.fetchall()
-	return render_template('home.html', teachers=teachers)
+        t.init(int(session['userid']))
+        print(str(t.currentCourses[0]) + " " + t.currentCourses[1])
+        course = t.currentCourses
+        return render_template('home.html', courses = course)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -83,8 +83,8 @@ def login():
 @app.route('/loggedin', methods=['GET'])
 def loggedin():
     error = None
-    t = BPSObjects.Teacher()
     t.init(session['userid'])
+    print(session['userid'])
     return render_template('loggedin.html', error = error)
 
 
@@ -109,6 +109,8 @@ def get_name(name):
 def assignmentList():
 	return render_template('Assignments.html', assignmentList = t.getAssignments())
 
+global t
+t = BPSObjects.Teacher()
 
 if __name__ == '__main__':
 	app.run(host='127.0.0.1', port=8080, debug=True)

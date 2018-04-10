@@ -211,8 +211,14 @@ def assignmentList():
 
 @app.route('/Courses/<courseNum>')
 def assignmentCourse(courseNum):
+        a = []
         assignments = Query("SELECT DISTINCT Description, DueDate FROM assignments WHERE CourseID =" + str(courseNum))
-        return render_template('Assignments.html', assignments = assignments)
+        for assignment in assignments:
+                temp = Assignment()
+                temp.description = assignment[0]
+                temp.dueDate = assignment[1]
+                a.append(temp)
+        return render_template('AssignmentList.html', assignments = a, courseNum = courseNum)
 
 global t
 t = Teacher()

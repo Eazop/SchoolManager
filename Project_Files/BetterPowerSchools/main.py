@@ -93,12 +93,13 @@ class Teacher:
         cur = db.cursor()
         assignmentHolder = []
         for course in self.currentCourses:
-            q = "SELECT * FROM assignments WHERE courseID = " + str(course)
+            q = "SELECT * FROM assignments WHERE CourseID = " + str(course.courseID)
             cur.execute(q)
             l = cur.fetchall()
-            a = Assignment()
-            a.init(l[0][0], l[0][1], l[0][2], l[0][3], l[0][4], l[0][5])
-            assignmentHolder.append(a)
+            for assignment in l:
+                a = Assignment()
+                a.init(assignment[0], assignment[1], assignment[2], assignment[3], assignment[4], assignment[5])
+                assignmentHolder.append(a)
         return assignmentHolder
 
 
@@ -201,6 +202,11 @@ def get_name(name):
 
 @app.route('/Assignments')
 def assignmentList():
+	return render_template('Assignments.html', assignments = t.getAssignments())
+
+@app.route('/Assignments/<course>')
+def assignmentCourse():
+
 	return render_template('Assignments.html', assignmentList = t.getAssignments())
 
 global t

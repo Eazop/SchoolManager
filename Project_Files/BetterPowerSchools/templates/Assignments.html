@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 {% extends "layout.html" %}
 
-{% block head %}
+<!-- {% block head %}
 <title>BPS - Assignments</title>
-{% endblock %}
+{% endblock %} -->
 
 {% block body %}
 <table>
@@ -13,11 +13,12 @@
 <tr>
 {% for assignment in assignments %}
 	<table>
-	<tr><td>{{assignment[0]}}</td><td></td></tr>
-	<tr><td>{{assignment[4]}}</td><td></td></tr>
-	<tr><td>{% if assignment[5] %}{{assignment[5]}} {% else %} "Not Submited" {% endif %}</td><td></td></tr>
+	<tr><td>{{assignment.assignmentID}}</td><td></td></tr>
+	<tr><td>{{assignment.description}}</td><td></td></tr>
+	<tr><td>{% if assignment.grade %}{{assignment.grade}} {% else %} "Not Submited" {% endif %}</td><td></td></tr>
 	<tr><td></td><td> <button name="Modify" type="button" onclick=alert("MODIFY!")>Modify Assignment</button </td></tr>
 	</table>
+{% endfor %}
 </tr>
 </table>
 {% endblock %}

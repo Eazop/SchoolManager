@@ -21,6 +21,9 @@ class Course:
         self.days = days
         self.time = time
 
+    def getAssignments(self):
+        return Query("SELECT DISTINCT Description, DueDate FROM assignments WHERE CourseID =" + str(self.courseID()))
+
 
 
 class Assignment:
@@ -59,16 +62,12 @@ class Teacher:
     currentCourses = []
     def init(self,teachID):
         self.teacherID = teachID
-        db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
-        cur = db.cursor()
         q ="Select * from courses where TeacherID =" + str(self.teacherID)
-        cur.execute(q)
-        temp = cur.fetchall()
+        temp = Query(q)
         for course in temp:
             c = Course()
             c.init(course[0], course[1], course[2], course[3], course[4])
             self.currentCourses.append(c)
-        db.close()
 
 #Adds a new assignment to the data base
     def submitAssignment(self, courseID, Description, DueDate):
@@ -102,7 +101,13 @@ class Teacher:
                 assignmentHolder.append(a)
         return assignmentHolder
 
-
+def Query(query):
+    db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
+    cur = db.cursor()
+    cur.execute(query)
+    l = cur.fetchall()
+    db.close()
+    return l
 
 
 app = Flask(__name__)
@@ -204,10 +209,10 @@ def get_name(name):
 def assignmentList():
 	return render_template('Assignments.html', assignments = t.getAssignments())
 
-@app.route('/Assignments/<course>')
-def assignmentCourse():
-
-	return render_template('Assignments.html', assignmentList = t.getAssignments())
+@app.route('/Courses/<courseNum>')
+def assignmentCourse(courseNum):
+        assignments = Query("SELECT DISTINCT Description, DueDate FROM assignments WHERE CourseID =" + str(courseNum))
+        return render_template('Assignments.html', assignments = assignments)
 
 global t
 t = Teacher()

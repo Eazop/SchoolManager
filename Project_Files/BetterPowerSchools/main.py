@@ -1,6 +1,8 @@
 from flask import Flask, request, session, g, redirect, url_for, abort, \
  render_template, flash
- import BPSObjects
+
+
+import BPSObjects
 
 from jinja2 import Template
 import pymysql
@@ -73,17 +75,18 @@ def login():
 			session['logged_in'] = True
 			session['userid'] = request.form['username']
 			session['role'] = role
-            t = Teacher()
-            t.init(session['userid'])
+
 
 			return redirect(url_for('loggedin'))
 	return render_template('login.html', error=error)
 
 @app.route('/loggedin', methods=['GET'])
 def loggedin():
-	error = None
+    error = None
+    t = BPSObjects.Teacher()
+    t.init(session['userid'])
+    return render_template('loggedin.html', error = error)
 
-	return render_template('loggedin.html', error=error)
 
 @app.route('/loggedout', methods=['GET'])
 def loggedout():
@@ -104,7 +107,7 @@ def get_name(name):
 
 @app.route('/Assignments')
 def assignmentList():
-	return render_template('Assignments.html' assignmentList = t.getAssignments())
+	return render_template('Assignments.html', assignmentList = t.getAssignments())
 
 
 if __name__ == '__main__':

@@ -14,19 +14,17 @@
         {% for course in courses %}
         <tr>
           <td>
-            {{course[0]}}
+            <a href= 'Assignments/{{course.courseID}}'>{{course.courseID}}</a>
+          </td>
+
+          <td>
+            {{course.subject}}
           </td>
           <td>
-            {{course[1]}}
+            {{course.days}}
           </td>
           <td>
-            {{course[2]}}
-          </td>
-          <td>
-            {{course[3]}}
-          </td>
-          <td>
-            {{course[4]}}
+            {{course.time}}
           </td>
         </tr>
         {% endfor %}

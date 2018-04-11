@@ -209,9 +209,23 @@ def get_name(name):
 @app.route('/Assignments')
 def assignmentList():
 	return render_template('Assignments.html', assignments = t.getAssignments())
-
 #This page will list all of the assignments from the associated
 #course with the course number
+
+@app.route('/teacherhome')
+def TeacherHome():
+	return render_template('TeacherHomeScreen.html')
+
+@app.route('/addassigments')
+def Addassign():
+	return render_template('AssignmentDescription.html')
+@app.route('/create_annoucements')
+def Annouce():
+	return render_template('CreateAnnoucements.html')
+
+
+
+
 @app.route('/Courses/<courseNum>')
 def assignmentCourse(courseNum):
         a = []
@@ -227,4 +241,4 @@ global t
 t = Teacher()
 
 if __name__ == '__main__':
-	app.run(host='127.0.0.1', port=8080, debug=True)
+	app.run(host='127.0.0.1', port=5000, debug=True)

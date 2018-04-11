@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<h2 class="subtitle">Assignment List</h2>
+<div class="profilebox">
+	<fieldset class="profilecreateform">
+	{% for x in range(0, total) %}
+	 	<p class="profilebox rhead" >Student ID: </p><p class="profilebox rbody">{{studentIDs[x]}}</p><br>
+	 	<p class="profilebox rhead">Name: </p><p class="profilebox rbody">{{nameList[x]}}</p><br>
+	 	<p class="profilebox rhead">Submission: </p><p class="profilebox rbody">{% if gradeList[x] %}{{gradeList[x]}} {% else %} "None Yet" {% endif %}</p><br>
+	 	<button onclick="location.href=''" type="button" class="button">Grade Assignment</button><br><br>
+	{% endfor %}
+</div>
+</div>
+
+{% endblock %}

@@ -226,14 +226,30 @@ def assignmentCourse(courseNum):
 @app.route('/Add', methods=['GET', 'POST'])
 def assignmentAdd():
     courseNum = request.form['courseNum']
-    # db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
-    # cur = db.cursor()
+
     t.submitAssignment(int(request.form['courseNum']),request.form['Title'], request.form['Description'], request.form['DueDate'])
-    # ro = cur.execute('INSERT INTO assignments (AssignmentID, StudentID, CourseID, Description, DueDate) VALUES (%s, %s, %s, %s, %s)',
-    #            [request.form['AssignmentID'], 0, request.form['courseNum'], request.form['Description'], request.form['DueDate']])
-    # db.commit()
-    # db.close()
+
     return redirect(url_for('assignmentCourse', courseNum = courseNum))
+
+@app.route('/Courses/<courseNum>/<assignTitle>')
+def List(courseNum, assignTitle):
+    listID =[]
+    nameList = []
+    gradeList = []
+    assignID = []
+    x=0
+    temp = Query("SELECT * FROM students WHERE Course1 =" + str(courseNum) +" OR Course2 =" + str(courseNum) +" OR Course3 =" + str(courseNum) +" OR Course4 =" + str(courseNum) +" OR Course5 =" + str(courseNum) +" OR Course6 = " + str(courseNum))
+    for t in temp:
+        listID.append(t[0])
+        nameList.append(t[2] + " " + t[1])
+        temp2 = Query("SELECT assignmentID, Grade FROM assignments WHERE StudentID =" + str(t[0]) + " AND Title = \"" + assignTitle + "\"")
+        assignID.append(temp2[0])
+        gradeList.append(temp2[1]) if (len(temp2) == 2) else gradeList.append(None)
+        x+=1
+    # temp2 = Query("SELECT assignmentID, Grade FROM assignments WHERE CourseID =" + str(courseNum) + " AND Title = \"" + assignTitle)
+    # for t in temp:
+    #     l[0][x] = t
+    return render_template('StudentAssignments.html', studentIDs = listID, nameList = nameList, gradeList = gradeList, assignID = assignID, total = x)
 
 global t
 t = Teacher()

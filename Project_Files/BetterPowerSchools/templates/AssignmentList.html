@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+
+<!-- {% block head %}
+<title>BPS - Assignments</title>
+{% endblock %} -->
+
+{% block body %}
+
+{% if session.logged_in %}
+	{% if session.role == "teacher" %}
+		<h1 class="title">Math {{courseNum}}</h1>
+		<!--this is an example, put your stuff into this area for the teacher home screen-->
+		<h2 class="subtitle">Assignments For your Class</h2>
+
+		<table  class ="table">
+			{% for assignment in assignments %}
+			<tr>
+				<td>
+					<a href= 'Courses/{{courseNum}}'>{{assignment.description}}</a>
+				</td>
+
+				<td>
+					{{assignment.dueDate}}
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+{% endif %}
+{% endif %}
+{% endblock %}

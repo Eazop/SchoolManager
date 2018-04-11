@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<html>
+	<head>
+	<br>
+	<br>
+	<br>
+		<title>Better Powerschool:Modify Assignment</title>
+	</head>
+	
+<body>
+<h1 class="title">
+	<h1 align="center"><font size= "10">Modify Assignment:</h1></font>
+		</h1>
+			</h1>
+			<br>
+			<br>
+			
+<div class="container">
+  <form action="/action_page.php">
+    <div class="row">
+      <div class="col-25">
+        <label for="aname">Assignment Name:</label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="aname" name="assignmentname">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+        <label for="ddate">Due Date:</label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="ddate" name="duedate">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+        <label for="description">Description:</label>
+      </div>
+      <div class="col-75">
+        <textarea id="description" name="description" style="height:200px"></textarea>
+      </div>
+    </div>
+    <div class="row">
+      <input type="submit" value="Submit">
+    </div>
+  </form>
+</div>
+
+</body>
+</html>
+{% endblock %}

@@ -10,25 +10,26 @@
       <h1 class="title">Teacher Home Screen</h1>
       <!--this is an example, put your stuff into this area for the teacher home screen-->
       <h2 class="subtitle">Your Courses</h2>
-      <table  class ="table">
-        {% for course in courses %}
-        <tr>
-          <td>
-            <a href= 'Courses/{{course.courseID}}'>{{course.courseID}}</a>
-          </td>
+      <div class="profilebox">
+        <table  class ="table" align = "center">
+          {% for course in courses %}
+          <tr>
+            <td>
+              <a href= 'Courses/{{course.courseID}}'>{{course.courseID}}</a>
+            </td>
 
-          <td>
-            {{course.subject}}
-          </td>
-          <td>
-            {{course.days}}
-          </td>
-          <td>
-            {{course.time}}
-          </td>
-        </tr>
-        {% endfor %}
-      </table>
+            <td>
+              {{course.subject}}
+            </td>
+            <td>
+              {{course.days}}
+            </td>
+            <td>
+              {{course.time}}
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
     {% endif %}
   {% endif %}
 {% endblock %}

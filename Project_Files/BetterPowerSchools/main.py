@@ -5,8 +5,6 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 from jinja2 import Template
 import pymysql
 
-import pymysql
-
 class Course:
     courseID = ""
     teacherID = ""
@@ -205,40 +203,36 @@ def logout():
 def get_name(name):
 	return "Hello "+name
 
-#This page all of the student's assignments 
 @app.route('/Assignments')
 def assignmentList():
-	return render_template('Assignments.html', assignments = t.getAssignments())
-#This page will list all of the assignments from the associated
-#course with the course number
+	return render_template('AssignmentList.html', assignments = t.getAssignments())
 
-@app.route('/teacherhome')
-def TeacherHome():
-	return render_template('TeacherHomeScreen.html')
-
-@app.route('/addassigments')
-def Addassign():
-	return render_template('AssignmentDescription.html')
-@app.route('/create_annoucements')
-def Annouce():
-	return render_template('CreateAnnoucements.html')
-
-
-
-
-@app.route('/Courses/<courseNum>')
+@app.route('/Courses/<courseNum>', methods=['GET', 'POST'])
 def assignmentCourse(courseNum):
         a = []
-        assignments = Query("SELECT DISTINCT Description, DueDate FROM assignments WHERE CourseID =" + str(courseNum))
+        assignments = Query("SELECT DISTINCT AssignmentID, Description, DueDate FROM assignments WHERE CourseID =" + str(courseNum))
         for assignment in assignments:
                 temp = Assignment()
-                temp.description = assignment[0]
-                temp.dueDate = assignment[1]
+                temp.assignmentID = assignment[0]
+                temp.description = assignment[1]
+                temp.dueDate = assignment[2]
                 a.append(temp)
-        return render_template('AssignmentList.html', assignments = a, courseNum = courseNum)
+
+        return render_template('Assignments.html', assignments = a, courseNum = courseNum)
+
+@app.route('/Add', methods=['GET', 'POST'])
+def assignmentAdd():
+    courseNum = request.form['courseNum']
+    db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
+    cur = db.cursor()
+    ro = cur.execute('INSERT INTO assignments (AssignmentID, StudentID, CourseID, Description, DueDate) VALUES (%s, %s, %s, %s, %s)',
+               [request.form['AssignmentID'], 0, request.form['courseNum'], request.form['Description'], request.form['DueDate']])
+    db.commit()
+    db.close()
+    return redirect(url_for('assignmentCourse', courseNum = courseNum))
 
 global t
 t = Teacher()
 
 if __name__ == '__main__':
-	app.run(host='127.0.0.1', port=5000, debug=True)
+	app.run(host='127.0.0.1', port=8080, debug=True)

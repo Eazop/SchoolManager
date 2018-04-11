@@ -205,10 +205,13 @@ def logout():
 def get_name(name):
 	return "Hello "+name
 
+#This page all of the student's assignments 
 @app.route('/Assignments')
 def assignmentList():
 	return render_template('Assignments.html', assignments = t.getAssignments())
 
+#This page will list all of the assignments from the associated
+#course with the course number
 @app.route('/Courses/<courseNum>')
 def assignmentCourse(courseNum):
         a = []

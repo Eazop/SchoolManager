@@ -1,6 +1,7 @@
-<html>
-	<head>
-	<br>
+<!DOCTYPE html>
+{% extends "layout.html" %}
+
+{% block body %}	<br>
 	<br>
 	<br>
 		<title>Better Powerschool:Teacher Portal</title>
@@ -15,11 +16,11 @@
 			<br>
 
       <ul>
-              <p><p align="center"><font size = "6"><b><br>Create Announcements</b></br>
-                <b><br>Assignments</b></br>
+              <p><p align="center"><font size = "6">
+                <b><br><a href="http://127.0.0.1:5000/create_annoucements">Create Announcements</a></b></br>
+                <b><br><a href="http://127.0.0.1:5000/addassigments">Add Assignments</a></b></br>
                 <b><br>Edit Reminders</b></br>
                 <b><br>Messages</font></b></br>
                 </p>
       </ul>
-	  </body>
-	  </html>
+{% endblock %}

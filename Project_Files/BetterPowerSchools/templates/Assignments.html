@@ -35,7 +35,9 @@
 	 	<p class="profilebox rhead" >Title: </p><p class="profilebox rbody">{{assignment.assignmentID}}</p><br>
 	 	<p class="profilebox rhead">Description: </p><p class="profilebox rbody">{{assignment.description}}</p><br>
 	 	<p class="profilebox rhead">Grades: </p><p class="profilebox rbody">{% if assignment.grade %}{{assignment.grade}} {% else %} "None Yet" {% endif %}</p><br>
-	 	<button onclick="location.href=''" type="button" class="button">Modify Assignment</button><br><br>
+	 	<button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}'" type="button" class="button">Modify Assignment</button>
+    <button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}'" type="button" class="button">View Submissions</button>
+    <br><br>
 	{% endfor %}
 </div>
 </div>

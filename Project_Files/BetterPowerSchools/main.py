@@ -243,7 +243,7 @@ def List(courseNum, assignTitle):
         listID.append(t[0])
         nameList.append(t[2] + " " + t[1])
         temp2 = Query("SELECT assignmentID, Grade FROM assignments WHERE StudentID =" + str(t[0]) + " AND Title = \"" + assignTitle + "\"")
-        assignID.append(temp2[0])
+        # assignID.append(temp2[0])
         gradeList.append(temp2[1]) if (len(temp2) == 2) else gradeList.append(None)
         x+=1
     # temp2 = Query("SELECT assignmentID, Grade FROM assignments WHERE CourseID =" + str(courseNum) + " AND Title = \"" + assignTitle)

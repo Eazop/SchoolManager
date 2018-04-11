@@ -25,6 +25,7 @@ class Course:
 
 
 class Assignment:
+    title = None
     dueDate = None
     courseID = None
     studentID = None
@@ -45,7 +46,8 @@ class Assignment:
         self.dueDate = l[4]
         if(l[5] != 'null'):
             self.grade = l[5]
-    def init(self, assignID, studID, Desc, CourID, Due, Gra):
+        self.title = l[6]
+    def init(self, assignID, studID, Desc, CourID, Due, Gra, Title):
         self.assignmentID = assignID
 
         self.studentID = studID
@@ -54,6 +56,7 @@ class Assignment:
         self.dueDate = Due
         if(Gra != 'null'):
             self.grade = Gra
+        self.title = Title
 
 class Teacher:
     teacherID = 0
@@ -68,7 +71,7 @@ class Teacher:
             self.currentCourses.append(c)
 
 #Adds a new assignment to the data base
-    def submitAssignment(self, courseID, Description, DueDate):
+    def submitAssignment(self, courseID, title, Description, DueDate):
         studentHolder = []
         db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
         cur = db.cursor()
@@ -79,7 +82,7 @@ class Teacher:
                 studentHolder.append(student[0])
 
         for student in studentHolder:
-            q = 'INSERT INTO assignments (StudentID, Description, CourseID, DueDate) VALUES (' + str(student) + ', \"' + Description + '\", ' + str(courseID) + ', \"' + DueDate + '\")'
+            q = 'INSERT INTO assignments (StudentID, Description, CourseID, DueDate, Title) VALUES (' + str(student) + ', \"' + Description + '\", ' + str(courseID) + ', \"' + DueDate + '\", \"' + title + '\")'
             cur.execute(q)
         db.commit()
         db.close()
@@ -210,7 +213,7 @@ def assignmentList():
 @app.route('/Courses/<courseNum>', methods=['GET', 'POST'])
 def assignmentCourse(courseNum):
         a = []
-        assignments = Query("SELECT DISTINCT AssignmentID, Description, DueDate FROM assignments WHERE CourseID =" + str(courseNum))
+        assignments = Query("SELECT DISTINCT Title, Description, DueDate FROM assignments WHERE CourseID =" + str(courseNum))
         for assignment in assignments:
                 temp = Assignment()
                 temp.assignmentID = assignment[0]
@@ -223,12 +226,13 @@ def assignmentCourse(courseNum):
 @app.route('/Add', methods=['GET', 'POST'])
 def assignmentAdd():
     courseNum = request.form['courseNum']
-    db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
-    cur = db.cursor()
-    ro = cur.execute('INSERT INTO assignments (AssignmentID, StudentID, CourseID, Description, DueDate) VALUES (%s, %s, %s, %s, %s)',
-               [request.form['AssignmentID'], 0, request.form['courseNum'], request.form['Description'], request.form['DueDate']])
-    db.commit()
-    db.close()
+    # db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
+    # cur = db.cursor()
+    t.submitAssignment(int(request.form['courseNum']),request.form['Title'], request.form['Description'], request.form['DueDate'])
+    # ro = cur.execute('INSERT INTO assignments (AssignmentID, StudentID, CourseID, Description, DueDate) VALUES (%s, %s, %s, %s, %s)',
+    #            [request.form['AssignmentID'], 0, request.form['courseNum'], request.form['Description'], request.form['DueDate']])
+    # db.commit()
+    # db.close()
     return redirect(url_for('assignmentCourse', courseNum = courseNum))
 
 global t

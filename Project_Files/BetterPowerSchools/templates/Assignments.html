@@ -5,18 +5,22 @@
 <div class="profilebox">
 	<div class="profilebox">
       <form action="{{ url_for('assignmentAdd') }}" method=post class=add-entry>
-        <fieldset class="profilecreateform"> 
-        <p class="s2">
+        <fieldset class="profilecreateform">
+        <!-- <p class="s2">
           <label class="l2">AssignmentID:</label>
           <input class="p2" type=text size=15 name=AssignmentID>
-          </p>
+          </p> -->
+					<p class="s2">
+	          <label class="l2">Title:</label>
+	          <input class="p2" type=text size=15 name=Title>
+	         </p>
           <p class="s2">
-          <label class="l2">Due Date:</label>
-          <input class="p2" type=text size=20 name=DueDate placeholder="MM/DD/YYYY"></input>
+          	<label class="l2">Due Date:</label>
+          	<input class="p2" type=text size=20 name=DueDate placeholder="MM/DD/YYYY"></input>
           </p>
           <p>
-          <label class="l2">Description:</label>
-          <textarea rows="6" cols="50" class="p2" maxlength="120" placeholder="120 Characters Max" type=text name=Description></textarea>
+          	<label class="l2">Description:</label>
+          	<textarea rows="6" cols="50" class="p2" maxlength="120" placeholder="120 Characters Max" type=text name=Description></textarea>
           </p>
           <input type=hidden value="{{ courseNum }}" name=courseNum>
           <input class="button" type=submit value="Create Assignment" style="margin-left: 0em">
@@ -26,11 +30,11 @@
 <br>
 <h2 class="subtitle">Assignment List</h2>
 <div class="profilebox">
-	<fieldset class="profilecreateform"> 
+	<fieldset class="profilecreateform">
 	{% for assignment in assignments %}
-	 	<p class="profilebox rhead" >Assignment ID: </p><p class="profilebox rbody">{{assignment.assignmentID}}</p><br>
+	 	<p class="profilebox rhead" >Title: </p><p class="profilebox rbody">{{assignment.assignmentID}}</p><br>
 	 	<p class="profilebox rhead">Description: </p><p class="profilebox rbody">{{assignment.description}}</p><br>
-	 	<p class="profilebox rhead">Grades: </p><p class="profilebox rbody">{% if assignment.grade %}{{assignment.grade}} {% else %} "None Yet" {% endif %}</p><br>	
+	 	<p class="profilebox rhead">Grades: </p><p class="profilebox rbody">{% if assignment.grade %}{{assignment.grade}} {% else %} "None Yet" {% endif %}</p><br>
 	 	<button onclick="location.href=''" type="button" class="button">Modify Assignment</button><br><br>
 	{% endfor %}
 </div>

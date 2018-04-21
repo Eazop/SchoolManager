@@ -28,13 +28,6 @@ class Student:
         q += str(self.studentID) + ", " + str(teacherID) + ", " + message + ", " + now.strftime("%Y-%m-%d %H:%M") + ")"
         m = Query(q)
 
-    # def getCurrentAssignments(self):
-    #     now = datetime.datetime.now()
-    #     q = Query("SELECT assignmentID, DueDate FROM assignments WHERE StudentID = " + str(self.studentID))
-    #     currentAssignments = []
-        # for assignment in q:
-        #     if int(assignment[1]) > now.month and
-
 
 class Course:
     courseID = ""

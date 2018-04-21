@@ -142,6 +142,17 @@ class Teacher:
                 assignmentHolder.append(a)
         return assignmentHolder
 
+class Message:
+    messageID
+    message = None
+    studentID = None
+    teacherID = None
+    sendDate = None
+
+    # def sendMessage(self):
+    #     Query("INSERT INTO messages (StudentID, TeacherID, Message, Time) VALUES ("+ self.studentID + ", ")
+
+
 def Query(query):
     db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
     cur = db.cursor()

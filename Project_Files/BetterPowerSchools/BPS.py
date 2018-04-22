@@ -1,5 +1,8 @@
 import pymysql
 
+#The student class holds all the values for a student
+#This should only be initialized if the user is logging in as a student successfully
+
 class Student:
     firstName = None
     lastName = None
@@ -7,6 +10,7 @@ class Student:
     parentID = None
     courses = []
 
+    #Initializes the class using just a studentID to pull the rest of the data from the database
     def init(self, studentID):
         q = Query("SELECT * FROM students WHERE studentID = " + str(studentID))
         self.studentID = q[0]
@@ -17,17 +21,19 @@ class Student:
             if q[x] :
                 c = Course()
                 c.init(q[x])
-                courses.append(c)
+                self.courses.append(c)
 
     def getParent(self):
         return parentID
 
+    #Posts a new message in the database
     def sendMessage(self, message, teacherID):
         now = datetime.datetime.now()
         q = "INSERT INTO messages (StudentID, TeacherID, Message, Time) VALUES ("
         q += str(self.studentID) + ", " + str(teacherID) + ", " + message + ", " + now.strftime("%Y-%m-%d %H:%M") + ")"
         m = Query(q)
 
+    #Sets all values back to their default (this should be used for logging out)
     def deconstruct(self):
         self.firstName = None
         self.lastName = None
@@ -36,6 +42,7 @@ class Student:
         self.courses = []
 
 
+#Holds all the values for a given course
 class Course:
     courseID = ""
     teacherID = ""
@@ -43,6 +50,7 @@ class Course:
     days = ""
     time = ""
 
+    #Initializes the course using a set of given values
     def init(self, courseID, teacherID, subject, days, time):
         self.courseID = courseID
         self.teacherID = teacherID
@@ -50,6 +58,7 @@ class Course:
         self.days = days
         self.time = time
 
+    #initialzes the course using just a course ID to pull the rest of the information from the database
     def init(self, courseID):
         q = Query("SELECT * from courses where courseID = " + str(courseID))
         print(q)
@@ -59,9 +68,12 @@ class Course:
         self.days = q[0][3]
         self.time = q[0][4]
 
+    #Returns a list of assignments associated with the particular course
     def getAssignments(self):
         return Query("SELECT DISTINCT Description, DueDate FROM assignments WHERE CourseID =" + str(self.courseID()))
 
+    #Sets all values of the course back to their default VALUES
+    #This should be used whenever the user is done with it
     def deconstruct(self):
         self.courseID = None
         self.teacherID = None

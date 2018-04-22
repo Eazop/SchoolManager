@@ -28,6 +28,13 @@ class Student:
         q += str(self.studentID) + ", " + str(teacherID) + ", " + message + ", " + now.strftime("%Y-%m-%d %H:%M") + ")"
         m = Query(q)
 
+    def deconstruct(self):
+        self.firstName = None
+        self.lastName = None
+        self.studentID = None
+        self.parentID = None
+        self.courses = []
+
 
 class Course:
     courseID = ""
@@ -54,6 +61,13 @@ class Course:
 
     def getAssignments(self):
         return Query("SELECT DISTINCT Description, DueDate FROM assignments WHERE CourseID =" + str(self.courseID()))
+
+    def deconstruct(self):
+        self.courseID = None
+        self.teacherID = None
+        self.subject = None
+        self.days = None
+        self.time = None
 
 
 class Assignment:
@@ -94,6 +108,14 @@ class Assignment:
         if(Gra != 'null'):
             self.grade = Gra
         self.title = Title
+
+    def deconstruct(self):
+        self.title = None
+        self.assignmentID = None
+        self.studentID = None
+        self.description = None
+        self.dueDate = None
+        self.grade = None
 
 #The teacher class holds all of the values of a teacher. It should match up
 # exactly with the values that are in the database
@@ -142,8 +164,13 @@ class Teacher:
                 assignmentHolder.append(a)
         return assignmentHolder
 
+    def deconstruct(self):
+        self.teacherID = None
+        self.currentCourses = []
+
+
 class Message:
-    messageID
+    messageID = -1
     message = None
     studentID = None
     teacherID = None
@@ -160,3 +187,10 @@ def Query(query):
     l = cur.fetchall()
     db.close()
     return l
+
+def deconstruct(self):
+    self.messageID = -1
+    self.message = None
+    self.studentID = None
+    self.teacherID = None
+    self.sendDate = None

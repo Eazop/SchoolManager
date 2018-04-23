@@ -13,14 +13,14 @@ class Student:
     #Initializes the class using just a studentID to pull the rest of the data from the database
     def init(self, studentID):
         q = Query("SELECT * FROM students WHERE studentID = " + str(studentID))
-        self.studentID = q[0]
-        self.firstName = q[1]
-        self.lastName = q[2]
-        self.parentID = q[3]
+        self.studentID = q[0][0]
+        self.firstName = q[0][1]
+        self.lastName = q[0][2]
+        self.parentID = q[0][3]
         for x in range(4, 10):
-            if q[x] :
+            if q[0][x] :
                 c = Course()
-                c.init(q[x])
+                c.init(q[0][x])
                 self.courses.append(c)
 
     def getParent(self):
@@ -191,6 +191,13 @@ class Message:
     # def sendMessage(self):
     #     Query("INSERT INTO messages (StudentID, TeacherID, Message, Time) VALUES ("+ self.studentID + ", ")
 
+    def deconstruct(self):
+        self.messageID = -1
+        self.message = None
+        self.studentID = None
+        self.teacherID = None
+        self.sendDate = None
+
 
 def Query(query):
     db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
@@ -199,10 +206,3 @@ def Query(query):
     l = cur.fetchall()
     db.close()
     return l
-
-def deconstruct(self):
-    self.messageID = -1
-    self.message = None
-    self.studentID = None
-    self.teacherID = None
-    self.sendDate = None

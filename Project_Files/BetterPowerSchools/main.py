@@ -34,11 +34,12 @@ def home():
         if s.studentID != None:
             courses = s.courses
             teachers = []
-            for(course in courses):
+            for course in courses:
                 q = "SELECT TeacherID, Fname, Lname FROM  teachers WHERE Course1 = " + str(course.courseID) + " OR Course2 = " + str(course.courseID) + " OR Course3 = " + str(course.courseID) + " OR Course4 = " + str(course.courseID)
                 teacher = Query(q)
+                print(teacher)
                 teachers.append(teacher)
-            return render_template('studentHome.html' courses = courses, teachers = teachers)
+            return render_template('studentHome.html', courses = courses, teachers = teachers)
         elif t.teacherID != None:
             courses = t.currentCourses
             return render_template('teacherHome.html', courses = courses)

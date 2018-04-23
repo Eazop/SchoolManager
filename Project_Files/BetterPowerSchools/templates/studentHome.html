@@ -6,12 +6,30 @@
   {% endif %}
 
   {% if session.logged_in %}
-    {% if session.role == "teacher" %}
+    {% if session.role == "student" %}
       <h1 class="title">Student Home Screen</h1>
       <!--this is an example, put your stuff into this area for the teacher home screen-->
       <h2 class="subtitle">Your Courses</h2>
       <div class="profilebox">
         <table  class ="table" align = "center">
+          <tr>
+            <td>
+              <h2>Course ID Number
+            </td>
+
+            <td>
+              Course Subject
+            </td>
+            <td>
+              Meeting Days
+            </td>
+            <td>
+              Meeting Time
+            </td>
+            <td>
+              Teacher
+            </td>
+          </tr>
           {% for course in courses %}
           <tr>
             <td>
@@ -29,8 +47,8 @@
             </td>
             <td>
               {% for teacher in teachers %}
-                {% if teacher[0] == course.teacherID %}
-                  {{teacher[1]}} {{teacher[2]}}
+                {% if teacher[0][0] == course.teacherID %}
+                  {{teacher[0][1]}} {{teacher[0][2]}}
                 {% endif %}
               {% endfor %}
             </td>

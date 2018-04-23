@@ -38,7 +38,7 @@
 	 	<p class="profilebox rhead">Description: </p><p class="profilebox rbody">{{assignment.description}}</p><br>
 	 	<p class="profilebox rhead">Grades: </p><p class="profilebox rbody">{% if assignment.grade %}{{assignment.grade}} {% else %} "None Yet" {% endif %}</p><br>
 	 	{% if session.role == "teacher" %}<button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}'" type="button" class="button">Modify Assignment</button>
-    <button onclick="gradePop()" type="button" class="button">Grade Assignment</button>
+    <button href = ""onclick="gradePop({{assignment.assignmentID}})" type="button" class="button">Grade Assignment</button>
 		{% endif %}
 		
     <br><br>
@@ -48,9 +48,9 @@
 {% endif %}
 
 <script>
-function gradePop(){
+function gradePop(assignmentID){
 	var grade =  prompt("Please Enter the grade for this assingment");
-	
+	window.location.href = "/"+assignmentID+"/update/"+grade;
 }
 </script>
 {% endblock %}

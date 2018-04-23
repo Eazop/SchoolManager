@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if not session.logged_in %}
+    <h1 class="title">Home Screen</h1>
+    <h2 class="subtitle">Please log in first</h2>
+  {% endif %}
+
+  {% if session.logged_in %}
+    {% if session.role == "teacher" %}
+      <h1 class="title">Student Home Screen</h1>
+      <!--this is an example, put your stuff into this area for the teacher home screen-->
+      <h2 class="subtitle">Your Courses</h2>
+      <div class="profilebox">
+        <table  class ="table" align = "center">
+          {% for course in courses %}
+          <tr>
+            <td>
+              <a href= 'Courses/{{course.courseID}}'>{{course.courseID}}</a>
+            </td>
+
+            <td>
+              {{course.subject}}
+            </td>
+            <td>
+              {{course.days}}
+            </td>
+            <td>
+              {{course.time}}
+            </td>
+            <td>
+              {% for teacher in teachers %}
+                {% if teacher[0] == course.teacherID %}
+                  {{teacher[1]}} {{teacher[2]}}
+                {% endif %}
+              {% endfor %}
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+    {% endif %}
+  {% endif %}
+{% endblock %}

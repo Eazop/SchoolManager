@@ -33,9 +33,15 @@ def connect_db():
 def home():
         if s.studentID != None:
             courses = s.courses
+            teachers = []
+            for(course in courses):
+                q = "SELECT TeacherID, Fname, Lname FROM  teachers WHERE Course1 = " + str(course.courseID) + " OR Course2 = " + str(course.courseID) + " OR Course3 = " + str(course.courseID) + " OR Course4 = " + str(course.courseID)
+                teacher = Query(q)
+                teachers.append(teacher)
+            return render_template('studentHome.html' courses = courses, teachers = teachers)
         elif t.teacherID != None:
             courses = t.currentCourses
-        return render_template('teacherHome.html', courses = courses)
+            return render_template('teacherHome.html', courses = courses)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -52,7 +58,7 @@ def login():
 		if (role == "teacher"):
 			ro = curs.execute('SELECT TeacherID FROM teachers WHERE TeacherID=%s', [request.form['username']])
 		elif (role == "student"):
-			ro = Query("SELECT studentID FROM students WHERE studentID=" + [request.form['username']])
+			ro = curs.execute('SELECT StudentID FROM students WHERE StudentID=%s', [request.form['username']])
 		elif (role == "parent"):
 			return "not implemented yet"
 
@@ -66,7 +72,8 @@ def login():
 		if (role == "teacher"):
 			ro = curs.execute('SELECT TeacherID, Password FROM teachers WHERE TeacherID=%s and Password=%s', [request.form['username'], request.form['password']])
 		elif (role == "student"):
-			return "not implemented yet"
+			ro = curs.execute('SELECT StudentID, Password FROM students WHERE StudentID=%s and Password=%s', [request.form['username'], request.form['password']])
+
 		elif (role == "parent"):
 			return "not implemented yet"
 		COMBINED = curs.fetchone()
@@ -93,7 +100,11 @@ def login():
 @app.route('/loggedin', methods=['GET'])
 def loggedin():
     error = None
-    t.init(session['userid'])
+    if session['role'] == "teacher":
+        t.init(session['userid'])
+    elif session['role'] == 'student':
+        s.init(session['userid'])
+
     return render_template('loggedin.html', error = error)
 
 
@@ -104,9 +115,11 @@ def loggedout():
 
 @app.route('/logout')
 def logout():
-	session.pop('userid', None)
-	session.pop('logged_in', None)
-	return redirect(url_for('loggedout'))
+    t.deconstruct()
+    s.deconstruct()
+    session.pop('userid', None)
+    session.pop('logged_in', None)
+    return redirect(url_for('loggedout'))
 
 #Example of creating a dynamic route. <name> is an argument
 #that is passed to the function invoked by the route

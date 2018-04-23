@@ -1,10 +1,11 @@
 {% extends "layout.html" %}
 {% block body %}
+{% if session.logged_in %}
 <h1 class="title">Assignments</h1>
 <h2 class="subtitle">Create Assignment</h2>
 <div class="profilebox">
 	<div class="profilebox">
-      <form action="{{ url_for('assignmentAdd') }}" method=post class=add-entry>
+		{% if session.role == "teacher" %} <form action="{{ url_for('assignmentAdd') }}" method=post class=add-entry>
         <fieldset class="profilecreateform">
         <!-- <p class="s2">
           <label class="l2">AssignmentID:</label>
@@ -27,6 +28,7 @@
         </fieldset>
       </form>
       </div>
+			{% endif %}
 <br>
 <h2 class="subtitle">Assignment List</h2>
 <div class="profilebox">
@@ -35,10 +37,13 @@
 	 	<p class="profilebox rhead" >Title: </p><p class="profilebox rbody">{{assignment.assignmentID}}</p><br>
 	 	<p class="profilebox rhead">Description: </p><p class="profilebox rbody">{{assignment.description}}</p><br>
 	 	<p class="profilebox rhead">Grades: </p><p class="profilebox rbody">{% if assignment.grade %}{{assignment.grade}} {% else %} "None Yet" {% endif %}</p><br>
-	 	<button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}'" type="button" class="button">Modify Assignment</button>
+	 	{% if session.role == "teacher" %}<button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}'" type="button" class="button">Modify Assignment</button>
     <button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}'" type="button" class="button">View Submissions</button>
+		{% endif %}
+		
     <br><br>
 	{% endfor %}
 </div>
 </div>
+{% endif %}
 {% endblock %}

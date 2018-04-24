@@ -1,87 +1,31 @@
 {% extends "layout.html" %}
-
 {% block body %}
-
 <h1 class="title">Assignments</h1>
-
 <h2 class="subtitle">Modify Assignment</h2>
-
 <div class="profilebox">
-
 	<div class="profilebox">
-
-      <!<form action="{{ url_for('assignmentAdd') }}" method=post class=add-entry>
-
+      <form action="{{ url_for('assignmentAdd') }}" method=post class=add-entry>
         <fieldset class="profilecreateform">
-
         <!-- <p class="s2">
-
           <label class="l2">AssignmentID:</label>
-
           <input class="p2" type=text size=15 name=AssignmentID>
-
           </p> -->
-
 					<p class="s2">
-
-	          <label class="l2">Title:</label>
-
-	          <input class="p2" type=text size=15 name=Title>
-
+	          <label class="l2">Modify Title:</label>
+	          <input class="p2" type=text size=15 name=Title>{{assignment.title}}
 	         </p>
-
           <p class="s2">
-
-          	<label class="l2">Due Date:</label>
-
-          	<input class="p2" type=text size=20 name=DueDate placeholder="MM/DD/YYYY"></input>
-
+          	<label class="l2">Modify Due Date:</label>
+          	<input class="p2" type=text size=20 name=DueDate placeholder="MM/DD/YYYY">{{assignment.date}}</input>
           </p>
-
           <p>
-
-          	<label class="l2">Description/Changes:</label>
-
-          	<textarea rows="6" cols="50" class="p2" maxlength="120" placeholder="120 Characters Max" type=text name=Description></textarea>
-
+          	<label class="l2">Modify Description:</label>
+          	<textarea rows="6" cols="50" class="p2" maxlength="120" placeholder="120 Characters Max" type=text name=Description></textarea>{{assignment.description}}
           </p>
-
           <input type=hidden value="{{ courseNum }}" name=courseNum>
-
           <input class="button" type=submit value="Modify Assignment" style="margin-left: 0em">
-
+		  <input class="button" type=submit value="Delete Assignment" style="margin-right: 0em">
         </fieldset>
-
       </form>
-
       </div>
-
-<br>
-
-<h2 class="subtitle">Assignment List</h2>
-
-<div class="profilebox">
-
-	<fieldset class="profilecreateform">
-
-	{% for assignment in assignments %}
-
-	 	<p class="profilebox rhead" >Title: </p><p class="profilebox rbody">{{assignment.assignmentID}}</p><br>
-
-	 	<p class="profilebox rhead">Description: </p><p class="profilebox rbody">{{assignment.description}}</p><br>
-
-	 	<p class="profilebox rhead">Grades: </p><p class="profilebox rbody">{% if assignment.grade %}{{assignment.grade}} {% else %} "None Yet" {% endif %}</p><br>
-
-	 	<button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}'" type="button" class="button">Create Assignment</button>
-
-    <button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}'" type="button" class="button">View Submissions</button>
-
-    <br><br>
-
-	{% endfor %}
-
-</div>
-
-</div>
-
-{% endblock %}
+{% endblock %}	 

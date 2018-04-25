@@ -34,13 +34,15 @@
 <div class="profilebox">
 	<fieldset class="profilecreateform">
 	{% for assignment in assignments %}
-	 	<p class="profilebox rhead" >Title: </p><p class="profilebox rbody">{{assignment.assignmentID}}</p><br>
+	 	<p class="profilebox rhead" >Title: </p><p class="profilebox rbody">{{assignment.title}}</p><br>
 	 	<p class="profilebox rhead">Description: </p><p class="profilebox rbody">{{assignment.description}}</p><br>
 	 	<p class="profilebox rhead">Grades: </p><p class="profilebox rbody">{% if assignment.grade %}{{assignment.grade}} {% else %} "None Yet" {% endif %}</p><br>
-	 	{% if session.role == "teacher" %}<button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}'" type="button" class="button">Modify Assignment</button>
-	<button onclick="location.href='/{{assignment.assignmentID}}/grade'" type="button" class="button">Grade Assignment</button>
+	 	{% if session.role == "teacher" %}<button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}/Modify'" type="button" class="button">Modify Assignment</button>
+		<button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}'" type="button" class="button">View Submissions</button>
+	<button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}/Delete'" type="button" class="button">Delete Assignment</button>
+
 		{% endif %}
-		
+
     <br><br>
 	{% endfor %}
 </div>

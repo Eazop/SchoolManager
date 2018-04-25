@@ -11,6 +11,7 @@ def Query(query):
     db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
     cur = db.cursor()
     cur.execute(query)
+    db.commit()
     l = cur.fetchall()
     db.close()
     return l
@@ -138,7 +139,7 @@ def assignmentCourse(courseNum):
         assignments = Query("SELECT DISTINCT Title, Description, DueDate FROM assignments WHERE CourseID =" + str(courseNum))
         for assignment in assignments:
                 temp = BPS.Assignment()
-                temp.assignmentID = assignment[0]
+                temp.title = assignment[0]
                 temp.description = assignment[1]
                 temp.dueDate = assignment[2]
                 a.append(temp)
@@ -172,6 +173,28 @@ def List(courseNum, assignTitle):
     # for t in temp:
     #     l[0][x] = t
     return render_template('StudentAssignments.html', studentIDs = listID, nameList = nameList, gradeList = gradeList, assignID = assignID, total = x)
+
+@app.route('/Courses/<courseNum>/<assignTitle>/Modify')
+def Modify(courseNum, assignTitle):
+    temp = Query("Select * FROM assignments WHERE Title =\"" + assignTitle + "\" AND courseID=" + str(courseNum))
+    assignment = BPS.Assignment()
+    assignment.init((int)(temp[0][0]), temp[0][1], temp[0][2], temp[0][3], temp[0][4], temp[0][5], temp[0][6])
+    return render_template('ModifyAssignment.html', assignment = assignment, courseNum = courseNum)
+
+@app.route('/updating', methods=['GET', 'POST'])
+def assignmentUpdate():
+    courseNum = request.form['courseNum']
+    title = request.form['origTitle']
+    print(courseNum)
+    l = Query("UPDATE assignments SET title = \"" + request.form['Title'] + "\", dueDate = \"" + request.form['DueDate'] + "\", description = \"" + request.form['Description'] + "\" WHERE title = \""+ title + "\" AND CourseID =" + courseNum )
+    return redirect(url_for('assignmentCourse', courseNum = courseNum))
+
+@app.route('/Courses/<courseNum>/<assignTitle>/Delete')
+def Delete(courseNum, assignTitle):
+    temp = Query("DELETE FROM assignments WHERE CourseID=" + courseNum + " AND Title=\"" + assignTitle + "\"")
+
+    return redirect(url_for('assignmentCourse', courseNum = courseNum))
+
 
 global t, s
 t = BPS.Teacher()

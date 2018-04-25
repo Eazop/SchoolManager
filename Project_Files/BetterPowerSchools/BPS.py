@@ -44,6 +44,7 @@ class Student:
 class Parent:
 
     
+    studentID = None    
     parentID = None
     courses = []
     
@@ -51,6 +52,7 @@ class Parent:
     currentCourses = []
     def init(self,parentID):
         self.parentID = parentID
+  
    
 
 

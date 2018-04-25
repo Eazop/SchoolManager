@@ -44,16 +44,21 @@ def home():
             courses = t.currentCourses
             return render_template('teacherHome.html', courses = courses)
 	elif p.parentID != None:
-	        courses = s.courses
-		teachers = []
-		for course in courses:
-		    q = "SELECT TeacherID, Fname, Lname FROM  teachers WHERE Course1 = " + str(course.courseID) + " OR Course2 = " + str(course.courseID) + " OR Course3 = " + str(course.courseID) + " OR Course4 = " + str(course.courseID)
-		    teacher = Query(q)
-		    print(teacher)
-		    teachers.append(teacher)
-		return render_template('parentHome.html', courses = courses, teachers = teachers)	    
-	    
-
+	        
+		return render_template('parentHome.html')
+	else:
+	    return render_template('login.html')
+	
+@app.route('/schedule', methods=['GET','POST'])
+def Schedule():
+    courses = p.courses
+    teachers = []
+    for course in courses:
+	q = "SELECT TeacherID, Fname, Lname FROM  teachers WHERE Course1 = " + str(course.courseID) + " OR Course2 = " + str(course.courseID) + " OR Course3 = " + str(course.courseID) + " OR Course4 = " + str(course.courseID)
+	teacher = Query(q)
+	print(teacher)
+	teachers.append(teacher)
+    return render_template('schedule_student.html', courses = courses, teachers = teachers)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

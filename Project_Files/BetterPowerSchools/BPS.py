@@ -40,9 +40,34 @@ class Student:
         self.studentID = None
         self.parentID = None
         self.courses = []
+        
+class Parent:
+
+    
+    studentID = None    
+    parentID = None
+    courses = []
+    
+    teacherID = 0
+    currentCourses = []
+    def init(self,parentID):
+        self.parentID = parentID
+  
+   
 
 
-#Holds all the values for a given course
+    def getStudent(self):
+        return studentID
+
+  
+
+    #Sets all values back to their default (this should be used for logging out)
+    def deconstruct(self):
+        self.firstName = None
+        self.lastName = None
+        self.studentID = None
+        self.parentID = None
+        self.courses = []
 class Course:
     courseID = ""
     teacherID = ""

@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block body %}
+{% if session.logged_in %}
+	<form action="{{ url_for('updateGrade') }}" method=post class=add-entry>
+	<label class="l2">Grade:</label>
+	<input class="p2" type=text size=15 name=Grade>
+	<input class="button" type=submit value="Submit Grade" style="margin-left: 0em">
+{% endif %}
+{% endblock %}

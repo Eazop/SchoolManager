@@ -44,7 +44,22 @@ def home():
         elif t.teacherID != None:
             courses = t.currentCourses
             return render_template('teacherHome.html', courses = courses)
+	elif p.parentID != None:
 
+		return render_template('parentHome.html')
+	else:
+	    return render_template('login.html')
+
+@app.route('/schedule', methods=['GET','POST'])
+def Schedule():
+    courses = p.courses
+    teachers = []
+    for course in courses:
+	q = "SELECT TeacherID, Fname, Lname FROM  teachers WHERE Course1 = " + str(course.courseID) + " OR Course2 = " + str(course.courseID) + " OR Course3 = " + str(course.courseID) + " OR Course4 = " + str(course.courseID)
+	teacher = Query(q)
+	print(teacher)
+	teachers.append(teacher)
+    return render_template('schedule_student.html', courses = courses, teachers = teachers)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -62,7 +77,8 @@ def login():
 		elif (role == "student"):
 			ro = curs.execute('SELECT StudentID FROM students WHERE StudentID=%s', [request.form['username']])
 		elif (role == "parent"):
-			return "not implemented yet"
+		        ro = curs.execute('SELECT ParentID FROM parents WHERE ParentID=%s', [request.form['username']])
+
 
 		USERNAME = curs.fetchone()
 		try:
@@ -77,7 +93,8 @@ def login():
 			ro = curs.execute('SELECT StudentID, Password FROM students WHERE StudentID=%s and Password=%s', [request.form['username'], request.form['password']])
 
 		elif (role == "parent"):
-			return "not implemented yet"
+			ro = curs.execute('SELECT ParentID, Password FROM parents WHERE ParentID=%s and Password=%s', [request.form['username'], request.form['password']])
+
 		COMBINED = curs.fetchone()
 		try:
 			stringpassword = ''.join(str(COMBINED[1]))
@@ -106,6 +123,9 @@ def loggedin():
         t.init(session['userid'])
     elif session['role'] == 'student':
         s.init(session['userid'])
+    elif session['role'] == 'parent':
+	p.init(session['userid'])
+
 
     return render_template('loggedin.html', error = error)
 
@@ -119,6 +139,7 @@ def loggedout():
 def logout():
     t.deconstruct()
     s.deconstruct()
+    p.deconstruct()
     session.pop('userid', None)
     session.pop('logged_in', None)
     return redirect(url_for('loggedout'))
@@ -196,8 +217,9 @@ def Delete(courseNum, assignTitle):
     return redirect(url_for('assignmentCourse', courseNum = courseNum))
 
 
-global t, s
+global t, s, p
 t = BPS.Teacher()
 s = BPS.Student()
+p = BPS.Parent()
 if __name__ == '__main__':
 	app.run(host='127.0.0.1', port=8080, debug=True)

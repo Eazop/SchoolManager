@@ -2,10 +2,10 @@
 {% block body %}
 {% if session.logged_in %}
 <h1 class="title">Assignments</h1>
+{% if session.role == "teacher" %} 
 <h2 class="subtitle">Create Assignment</h2>
-<div class="profilebox">
-	<div class="profilebox">
-		{% if session.role == "teacher" %} <form action="{{ url_for('assignmentAdd') }}" method=post class=add-entry>
+<div class="profilebox" style="margin-bottom: 2%">
+		<form action="{{ url_for('assignmentAdd') }}" method=post class=add-entry>
         <fieldset class="profilecreateform">
         <!-- <p class="s2">
           <label class="l2">AssignmentID:</label>
@@ -27,25 +27,30 @@
           <input class="button" type=submit value="Create Assignment" style="margin-left: 0em">
         </fieldset>
       </form>
-      </div>
+      <br>
+    </div>
 			{% endif %}
-<br>
+
 <h2 class="subtitle">Assignment List</h2>
 <div class="profilebox">
 	<fieldset class="profilecreateform">
-	{% for assignment in assignments %}
-	 	<p class="profilebox rhead" >Title: </p><p class="profilebox rbody">{{assignment.title}}</p><br>
-	 	<p class="profilebox rhead">Description: </p><p class="profilebox rbody">{{assignment.description}}</p><br>
-	 	<p class="profilebox rhead">Grades: </p><p class="profilebox rbody">{% if assignment.grade %}{{assignment.grade}} {% else %} "None Yet" {% endif %}</p><br>
-	 	{% if session.role == "teacher" %}<button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}/Modify'" type="button" class="button">Modify Assignment</button>
-		<button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}'" type="button" class="button">View Submissions</button>
-	<button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}/Delete'" type="button" class="button">Delete Assignment</button>
+  {% if assignments != [] %}
+  	{% for assignment in assignments %}
+  	 	<p class="profilebox rhead" >Title: </p><p class="profilebox rbody">{{assignment.title}}</p><br>
+  	 	<p class="profilebox rhead">Description: </p><p class="profilebox rbody">{{assignment.description}}</p><br>
+  	 	<!--<p class="profilebox rhead">Grades: </p><p class="profilebox rbody">{% if assignment.grade %}{{assignment.grade}} {% else %} "None Yet" {% endif %}</p>-->
+  	 	{% if session.role == "teacher" %}
+  		<button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}'" type="button" class="button">View Submissions</button>
+      <button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}/Modify'" type="button" class="button">Modify Assignment</button>
+      <button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}/Delete'" type="button" class="button">Delete Assignment</button>
+  		{% endif %}
 
-		{% endif %}
-
-    <br><br>
-	{% endfor %}
-</div>
+      <br>
+  	{% endfor %}
+  {% endif %}
+  {% if assignments == [] %}
+    <h2 class="subtitle"><center>No Assignments Yet</center></h2>
+  {% endif %}
 </div>
 {% endif %}
 {% endblock %}

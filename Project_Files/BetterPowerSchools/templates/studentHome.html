@@ -11,24 +11,23 @@
       <!--this is an example, put your stuff into this area for the teacher home screen-->
       <h2 class="subtitle">Your Courses</h2>
       <div class="profilebox">
-        <table  class ="table" align = "center">
+        <table  class ="table">
           <tr>
-            <td>
-              <h2>Course ID Number
-            </td>
-
-            <td>
-              Course Subject
-            </td>
-            <td>
-              Meeting Days
-            </td>
-            <td>
-              Meeting Time
-            </td>
-            <td>
-              Teacher
-            </td>
+            <th style="padding-right:2%">
+              <bold>Course ID Number</bold>
+            </th>
+            <th style="padding-right:2%">
+              <bold>Course Subject</bold>
+            </th>
+            <th style="padding-right:2%">
+              <bold>Meeting Days</bold>
+            </th>
+            <th style="padding-right:2%">
+              <bold>Meeting Time</bold>
+            </th>
+            <th style="padding-right:2%">
+              <bold>Teacher</bold>
+            </th>
           </tr>
           {% for course in courses %}
           <tr>

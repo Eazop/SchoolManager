@@ -1,0 +1,25 @@
+ {% extends "layout.html" %}
+{% block body %}
+  {% if not session.logged_in %}
+    <h1 class="title">Home Screen</h1>
+    <h2 class="subtitle">Please log in first</h2>
+  {% endif %}
+
+ 
+
+  {% if session.logged_in %}
+    {% if session.role == "parent" %}
+      <h1 class="title">Parent Home Screen</h1>
+      <!--this is an example, put your stuff into this area for the teacher home screen-->
+      <ul>
+              <p><p align="center"><font size = "6">
+                <b><br><a href="">View Student Schedule</a></b></br>
+                <b><br><a href="">View Assigments</a></b></br>
+                <b><br><a href="">Messages</a></b></br>
+                </p>
+      </ul>
+
+{% endif %}
+{% endif %}
+   
+{% endblock %}

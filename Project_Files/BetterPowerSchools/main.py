@@ -38,7 +38,6 @@ def home():
         for course in courses:
             q = "SELECT TeacherID, Fname, Lname FROM  teachers WHERE Course1 = " + str(course.courseID) + " OR Course2 = " + str(course.courseID) + " OR Course3 = " + str(course.courseID) + " OR Course4 = " + str(course.courseID)
             teacher = Query(q)
-            print(teacher)
             teachers.append(teacher)
         return render_template('studentHome.html', courses = courses, teachers = teachers)
     elif t.teacherID != None:
@@ -58,7 +57,6 @@ def Schedule():
     for course in courses:
         q = "SELECT TeacherID, Fname, Lname FROM  teachers WHERE Course1 = " + str(course.courseID) + " OR Course2 = " + str(course.courseID) + " OR Course3 = " + str(course.courseID) + " OR Course4 = " + str(course.courseID)
         teacher = Query(q)
-        print(teacher)
         teachers.append(teacher)
     return render_template('schedule_student.html', courses = courses, teachers = teachers)
 
@@ -188,8 +186,9 @@ def List(courseNum, assignTitle):
         listID.append(t[0])
         nameList.append(t[2] + " " + t[1])
         temp2 = Query("SELECT assignmentID, Grade FROM assignments WHERE StudentID =" + str(t[0]) + " AND Title = \"" + assignTitle + "\"")
-        # assignID.append(temp2[0])
-        gradeList.append(temp2[1]) if (len(temp2) == 2) else gradeList.append(None)
+        assignID.append(temp2[0][0])
+        gradeList.append(temp2[0][1])
+
         x+=1
     # temp2 = Query("SELECT assignmentID, Grade FROM assignments WHERE CourseID =" + str(courseNum) + " AND Title = \"" + assignTitle)
     # for t in temp:
@@ -207,7 +206,6 @@ def Modify(courseNum, assignTitle):
 def assignmentUpdate():
     courseNum = request.form['courseNum']
     title = request.form['origTitle']
-    print(courseNum)
     l = Query("UPDATE assignments SET title = \"" + request.form['Title'] + "\", dueDate = \"" + request.form['DueDate'] + "\", description = \"" + request.form['Description'] + "\" WHERE title = \""+ title + "\" AND CourseID =" + courseNum )
     return redirect(url_for('assignmentCourse', courseNum = courseNum))
 
@@ -217,6 +215,19 @@ def Delete(courseNum, assignTitle):
 
     return redirect(url_for('assignmentCourse', courseNum = courseNum))
 
+@app.route('/UpdateGrade/<assignmentID>')
+def updateGradeHTML(assignmentID):
+    return render_template("Grading.html", assignmentID=assignmentID)
+
+@app.route('/UpdatingGrade', methods=['GET', 'POST'])
+def updateGrade():
+    assignmentID = request.form['assignmentID']
+    a = BPS.Assignment()
+    a.initByID(assignmentID)
+    print("Not updated grade")
+    a.updateGrade(request.form['Grade'])
+    print("Updated Grade")
+    return redirect(url_for('List', courseNum =a.courseID, assignTitle=a.title))
 
 global t, s, p
 t = BPS.Teacher()

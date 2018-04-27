@@ -40,26 +40,21 @@ class Student:
         self.studentID = None
         self.parentID = None
         self.courses = []
-        
+
 class Parent:
 
-    
-    studentID = None    
+
+    studentID = None
     parentID = None
     courses = []
-    
+
     teacherID = 0
     currentCourses = []
     def init(self,parentID):
         self.parentID = parentID
-  
-   
-
 
     def getStudent(self):
         return studentID
-
-  
 
     #Sets all values back to their default (this should be used for logging out)
     def deconstruct(self):
@@ -118,20 +113,21 @@ class Assignment:
 
 #This initializes the assignment using just an assignmentID by pulling the rest
 # of the values from the database.
-    def init(self, assignID):
+    def initByID(self, assignID):
         self.assignmentID = assignID
         db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
         cur = db.cursor()
         q = "SELECT * FROM assignments WHERE assignmentID = " + str(self.assignmentID)
         cur.execute(q)
         l = cur.fetchall()
-        self.studentID = l[1]
-        self.description =l[2]
-        self.courseID = l[3]
-        self.dueDate = l[4]
-        if(l[5] != 'null'):
-            self.grade = l[5]
-        self.title = l[6]
+        self.studentID = l[0][1]
+        self.description =l[0][2]
+        self.courseID = l[0][3]
+        self.dueDate = l[0][4]
+        if(l[0][5] != 'null'):
+            self.grade = l[0][5]
+        self.title = l[0][6]
+        db.close()
 
 #This initializes the assignment using given variables. This should only be used
 # when the assignment is being created and added to the database
@@ -154,6 +150,10 @@ class Assignment:
         self.dueDate = None
         self.grade = None
 
+    def updateGrade(self,grade):
+    
+        l = Query("UPDATE assignments SET Grade=" + str(grade) + " WHERE assignmentID=" + str(self.assignmentID))
+        self.grade = grade
 #The teacher class holds all of the values of a teacher. It should match up
 # exactly with the values that are in the database
 
@@ -228,6 +228,7 @@ def Query(query):
     db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
     cur = db.cursor()
     cur.execute(query)
+    db.commit()
     l = cur.fetchall()
     db.close()
     return l

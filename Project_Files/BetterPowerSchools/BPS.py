@@ -81,7 +81,6 @@ class Course:
     #initialzes the course using just a course ID to pull the rest of the information from the database
     def init(self, courseID):
         q = Query("SELECT * from courses where courseID = " + str(courseID))
-        print(q)
         self.courseID = courseID
         self.teacherID = q[0][1]
         self.subject = q[0][2]
@@ -151,7 +150,7 @@ class Assignment:
         self.grade = None
 
     def updateGrade(self,grade):
-    
+
         l = Query("UPDATE assignments SET Grade=" + str(grade) + " WHERE assignmentID=" + str(self.assignmentID))
         self.grade = grade
 #The teacher class holds all of the values of a teacher. It should match up

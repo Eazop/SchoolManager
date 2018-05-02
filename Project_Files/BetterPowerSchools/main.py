@@ -231,6 +231,21 @@ def sendMessage():
     date = now.strftime("%Y-%m-%d %H:%M")
     message.sendDate = date
     message.sendMessage()
+    return redirect(url_for('messaging', teacherID = message.teacherID))
+
+@app.route("/Messages/<teacherID>")
+def messaging(teacherID):
+    q = "SELECT studentID FROM messages WHERE teacherID = " + TeacherID
+    m = Query(q)
+    a = []
+    for ID in m:
+        for stud in a:
+            if stud.studentID != ID:
+                student = BPS.Student()
+                student.init(ID)
+                a.append(student)
+                break
+    return render_template("MessageList.html", students=a, teacher = t)
 
 
 global t, s, p

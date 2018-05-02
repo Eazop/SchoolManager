@@ -221,8 +221,8 @@ def updateGrade():
     a.updateGrade(request.form['Grade'])
     return redirect(url_for('List', courseNum =a.courseID, assignTitle=a.title))
 
-@app.route('/Messages', methods=['GET', 'POST'])
-def message():
+@app.route('/Sending', methods=['GET', 'POST'])
+def sendMessage():
     message = BPS.Message()
     message.message = request.form['Message']
     message.teacherID = request.form['TeacherID']
@@ -230,6 +230,8 @@ def message():
     now = datetime.datetime.now()
     date = now.strftime("%Y-%m-%d %H:%M")
     message.sendDate = date
+    message.sendMessage()
+
 
 global t, s, p
 t = BPS.Teacher()

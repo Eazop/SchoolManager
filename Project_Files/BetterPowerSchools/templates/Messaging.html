@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1 class="title">Assignments</h1>
+<h2 class="subtitle">Modify Assignment</h2>
+<div class="profilebox">
+	<div class="profilebox">
+      <form action="{{ url_for('assignmentUpdate') }}" method=post class=add-entry>
+        <fieldset class="profilecreateform">
+        <!-- <p class="s2">
+          <label class="l2">AssignmentID:</label>
+          <input class="p2" type=text size=15 name=AssignmentID>
+          </p> -->
+					<p class="s2">
+	          <label class="l2">Recipient:</label>
+	          {{teacher.fname}} {{teacher.lname}}
+	         </p>
+          <p class="s2">
+          	<label class="l2">Message Body:</label>
+          	<textarea rows="6" cols="50" class="p2" maxlength="120" placeholder="Type here" type=text name=Message></textarea>
+          </p>
+
+          <input type=hidden value="{{ studentID }}" name=StudentID>
+					<input type=hidden value="{{ teacherID }}" name=TeacherID>
+          <input class="button" type=submit value="Modify Assignment" style="margin-left: 0em">
+		  <input class="button" type=submit value="Delete Assignment" style="margin-right: 0em">
+        </fieldset>
+      </form>
+      </div>
+{% endblock %}

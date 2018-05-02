@@ -23,3 +23,6 @@ entrypoint: gunicorn -b :$PORT main:app
 runtime_config:
   python_version: 3
 
+
+beta_settings:
+    cloud_sql_instances: encoded-road-198518:us-east1:csc330-01

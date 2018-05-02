@@ -2,7 +2,7 @@
 {% block body %}
 {% if session.logged_in %}
 <h1 class="title">Assignments</h1>
-{% if session.role == "teacher" %} 
+{% if session.role == "teacher" %}
 <h2 class="subtitle">Create Assignment</h2>
 <div class="profilebox" style="margin-bottom: 2%">
 		<form action="{{ url_for('assignmentAdd') }}" method=post class=add-entry>

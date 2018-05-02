@@ -7,6 +7,8 @@ from jinja2 import Template
 import pymysql
 import BPS
 
+#Just queries the database for whatever information you give it
+#NOTE: It returns a tuple since it is a fetchall
 def Query(query):
     db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
     cur = db.cursor()
@@ -30,6 +32,10 @@ def connect_db():
 	db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
 	return db
 
+#Dashboard for the application
+#For a student it will find information for their teachers and courses, then list them
+#For a teacher it will list the courses that they teach
+#For a parent it will find information for the parent's child's classes and teachers
 @app.route('/', methods=['GET','POST'])
 def home():
     if s.studentID != None:
@@ -50,6 +56,7 @@ def home():
     else:
         return render_template('login.html')
 
+#Shows a schedule for a student
 @app.route('/schedule', methods=['GET','POST'])
 def Schedule():
     courses = p.courses
@@ -60,6 +67,8 @@ def Schedule():
         teachers.append(teacher)
     return render_template('schedule_student.html', courses = courses, teachers = teachers)
 
+#Handles login in requests and queries the database based on which role the
+#user has selected
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	error = None
@@ -115,6 +124,7 @@ def login():
 			return redirect(url_for('loggedin'))
 	return render_template('login.html', error=error)
 
+#Processing page for a successful login
 @app.route('/loggedin', methods=['GET'])
 def loggedin():
     error = None
@@ -125,15 +135,16 @@ def loggedin():
     elif session['role'] == 'parent':
         p.init(session['userid'])
 
-
     return render_template('loggedin.html', error = error)
 
-
+#Confirmation page for a successful login
 @app.route('/loggedout', methods=['GET'])
 def loggedout():
 	error = None
 	return render_template('loggedout.html', error=error)
 
+#Processing page for logging out. Deconstructs the global variables then pops the
+#session information
 @app.route('/logout')
 def logout():
     t.deconstruct()
@@ -143,10 +154,7 @@ def logout():
     session.pop('logged_in', None)
     return redirect(url_for('loggedout'))
 
-@app.route('/Assignments')
-def assignmentList():
-	return render_template('AssignmentList.html', assignments = t.getAssignments())
-
+#Lists all of the unique assignments for a course
 @app.route('/Courses/<courseNum>', methods=['GET', 'POST'])
 def assignmentCourse(courseNum):
         a = []
@@ -160,14 +168,15 @@ def assignmentCourse(courseNum):
 
         return render_template('Assignments.html', assignments = a, courseNum = courseNum)
 
+#Processing page for assignment creation
 @app.route('/Add', methods=['GET', 'POST'])
 def assignmentAdd():
     courseNum = request.form['courseNum']
-
     t.submitAssignment(int(request.form['courseNum']),request.form['Title'], request.form['Description'], request.form['DueDate'])
-
     return redirect(url_for('assignmentCourse', courseNum = courseNum))
 
+#Lists all of the submissions for a given assignment by pulling all students enrolled
+#in the class then finding the assignments associated with them
 @app.route('/Courses/<courseNum>/<assignTitle>')
 def List(courseNum, assignTitle):
     listID =[]
@@ -182,13 +191,12 @@ def List(courseNum, assignTitle):
         temp2 = Query("SELECT assignmentID, Grade FROM assignments WHERE StudentID =" + str(t[0]) + " AND Title = \"" + assignTitle + "\"")
         assignID.append(temp2[0][0])
         gradeList.append(temp2[0][1])
-
         x+=1
-    # temp2 = Query("SELECT assignmentID, Grade FROM assignments WHERE CourseID =" + str(courseNum) + " AND Title = \"" + assignTitle)
-    # for t in temp:
-    #     l[0][x] = t
+
     return render_template('StudentAssignments.html', studentIDs = listID, nameList = nameList, gradeList = gradeList, assignID = assignID, total = x)
 
+#Shows a page that is prepopulated with the information about a particular assignment
+#and allows the user to edit the values as desired
 @app.route('/Courses/<courseNum>/<assignTitle>/Modify')
 def Modify(courseNum, assignTitle):
     temp = Query("Select * FROM assignments WHERE Title =\"" + assignTitle + "\" AND courseID=" + str(courseNum))
@@ -196,6 +204,7 @@ def Modify(courseNum, assignTitle):
     assignment.init((int)(temp[0][0]), temp[0][1], temp[0][2], temp[0][3], temp[0][4], temp[0][5], temp[0][6])
     return render_template('ModifyAssignment.html', assignment = assignment, courseNum = courseNum)
 
+#Processing page after a successful modification of an assignment
 @app.route('/updating', methods=['GET', 'POST'])
 def assignmentUpdate():
     courseNum = request.form['courseNum']
@@ -203,16 +212,20 @@ def assignmentUpdate():
     l = Query("UPDATE assignments SET title = \"" + request.form['Title'] + "\", dueDate = \"" + request.form['DueDate'] + "\", description = \"" + request.form['Description'] + "\" WHERE title = \""+ title + "\" AND CourseID =" + courseNum )
     return redirect(url_for('assignmentCourse', courseNum = courseNum))
 
+#Processing page for the deletion of an assignment
 @app.route('/Courses/<courseNum>/<assignTitle>/Delete')
 def Delete(courseNum, assignTitle):
     temp = Query("DELETE FROM assignments WHERE CourseID=" + courseNum + " AND Title=\"" + assignTitle + "\"")
 
     return redirect(url_for('assignmentCourse', courseNum = courseNum))
 
+#Brings up a small form for the teacher to give the student a grade
 @app.route('/UpdateGrade/<assignmentID>')
 def updateGradeHTML(assignmentID):
     return render_template("Grading.html", assignmentID=assignmentID)
 
+#Processing page for a successful grade update
+#redirects to the list of all submissions for an assignment
 @app.route('/UpdatingGrade', methods=['GET', 'POST'])
 def updateGrade():
     assignmentID = request.form['assignmentID']
@@ -221,6 +234,7 @@ def updateGrade():
     a.updateGrade(request.form['Grade'])
     return redirect(url_for('List', courseNum =a.courseID, assignTitle=a.title))
 
+#Processing page for a successful message submission
 @app.route('/Sending', methods=['GET', 'POST'])
 def sendMessage():
     message = BPS.Message()
@@ -233,6 +247,7 @@ def sendMessage():
     message.sendMessage()
     return redirect(url_for('messaging', teacherID = message.teacherID))
 
+#The teacher's view for all conversations that they currently have going on
 @app.route("/Messages/<teacherID>")
 def messagingTeacher(teacherID):
     q = "SELECT studentID FROM messages WHERE teacherID = " + TeacherID
@@ -247,6 +262,7 @@ def messagingTeacher(teacherID):
                 break
     return render_template("MessageList.html", students=a, teacher = t)
 
+#The student's view for all ocnversations that they currently have going on
 @app.route("/Messages/<studentID>")
 def messagingStudent(studentID):
     q = "SELECT teacherID FROM messages WHERE studentID = " + studentID
@@ -261,6 +277,7 @@ def messagingStudent(studentID):
                 break
     return render_template("MessageList.html", teachers=a, student = t)
 
+#Shows all messages that were sent in a conversation as seen by a student.
 @app.route("/Messages/<studentID>/<teacherID>")
 def messagingStudentView(studentID, teacherID):
     q = "SELECT messageID FROM messages WHERE studentID = " + studentID + " AND teacherID = " + teacherID
@@ -272,6 +289,7 @@ def messagingStudentView(studentID, teacherID):
         a.append(m)
     return render_template("MessageList.html", messages=a, student = s)
 
+#shows all messages that were sent in a conversation as seen by a teacher.
 @app.route("/Messages/<teacherID>/<studentID>")
 def messagingTeacherView(teacherID, studentID):
     q = "SELECT messageID FROM messages WHERE studentID = " + studentID + " AND teacherID = " + teacherID
@@ -283,6 +301,7 @@ def messagingTeacherView(teacherID, studentID):
         a.append(m)
     return render_template("MessageList.html", teachers=a, student = t)
 
+# declares and initialzes the global variables to be used throughout the program.
 global t, s, p
 t = BPS.Teacher()
 s = BPS.Student()

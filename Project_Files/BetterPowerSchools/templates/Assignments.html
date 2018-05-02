@@ -2,7 +2,7 @@
 {% block body %}
 {% if session.logged_in %}
 <h1 class="title">Assignments</h1>
-{% if session.role == "teacher" %} 
+{% if session.role == "teacher" %}
 <h2 class="subtitle">Create Assignment</h2>
 <div class="profilebox" style="margin-bottom: 2%">
 		<form action="{{ url_for('assignmentAdd') }}" method=post class=add-entry>
@@ -17,7 +17,7 @@
 	         </p>
           <p class="s2">
           	<label class="l2">Due Date:</label>
-          	<input class="p2" type=text size=20 name=DueDate placeholder="MM/DD/YYYY"></input>
+          	<input type="date" name="DueDate" min="2017-12-31" max="2019-12-31">
           </p>
           <p>
           	<label class="l2">Description:</label>

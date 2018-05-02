@@ -42,9 +42,7 @@ class Student:
         self.courses = []
 
 class Parent:
-
-
-    studentID = None
+    student = None
     parentID = None
     courses = []
 
@@ -52,6 +50,10 @@ class Parent:
     currentCourses = []
     def init(self,parentID):
         self.parentID = parentID
+        q = "SELECT studentID FROM students WHERE parentID=" + ParentID
+        q = Query(q)
+        student = Student()
+        student.init(q[0][0])
 
     def getStudent(self):
         return studentID
@@ -63,6 +65,7 @@ class Parent:
         self.studentID = None
         self.parentID = None
         self.courses = []
+
 class Course:
     courseID = ""
     teacherID = ""
@@ -198,7 +201,7 @@ class Teacher:
                 a = Assignment()
                 a.init(assignment[0], assignment[1], assignment[2], assignment[3], assignment[4], assignment[5])
                 assignmentHolder.append(a)
-		db.close()
+        db.close()
         return assignmentHolder
 
     def deconstruct(self):
@@ -214,21 +217,21 @@ class Message:
     sendDate = None
     sender = None
 
-	def initByAll(self, messageID, message, studentID, teacherID, sendDate):
-		self.messageID = messageID
-		self.message = message
-		self.studentID = studentID
-		self.teacherID = teacherID
-		self.sendDate = sendDate
+    def initByAll(self, messageID, message, studentID, teacherID, sendDate):
+        self.messageID = messageID
+        self.message = message
+        self.studentID = studentID
+        self.teacherID = teacherID
+        self.sendDate = sendDate
 
-	def initByID(self, messageID):
-		self.messageID = messageID
-		q = "SELECT * FROM messages WHERE messageID = " + str(messageID)
-		c = Query(q)
-		self.message = c[1]
-		self.studentID = c[2]
-		self.teacherID = c[3]
-		self.sendDate = c[4]
+    def initByID(self, messageID):
+        self.messageID = messageID
+        q = "SELECT * FROM messages WHERE messageID = " + str(messageID)
+        c = Query(q)
+        self.message = c[0][1]
+        self.studentID = c[0][2]
+        self.teacherID = c[0][3]
+        self.sendDate = c[0][4]
 
     def sendMessage(self):
          Query("INSERT INTO messages (StudentID, TeacherID, Message, Time) VALUES ("+ self.studentID + ", " + self.teacherID + ", " + self.message + ", " + self.sendDate +")" )

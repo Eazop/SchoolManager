@@ -234,7 +234,7 @@ def sendMessage():
     return redirect(url_for('messaging', teacherID = message.teacherID))
 
 @app.route("/Messages/<teacherID>")
-def messaging(teacherID):
+def messagingTeacher(teacherID):
     q = "SELECT studentID FROM messages WHERE teacherID = " + TeacherID
     m = Query(q)
     a = []
@@ -247,6 +247,41 @@ def messaging(teacherID):
                 break
     return render_template("MessageList.html", students=a, teacher = t)
 
+@app.route("/Messages/<studentID>")
+def messagingStudent(studentID):
+    q = "SELECT teacherID FROM messages WHERE studentID = " + studentID
+    m = Query(q)
+    a = []
+    for ID in m:
+        for teach in a:
+            if stud.studentID != ID:
+                teacher = BPS.Teacher()
+                teacher.init(ID)
+                a.append(teacher)
+                break
+    return render_template("MessageList.html", teachers=a, student = t)
+
+@app.route("/Messages/<studentID>/<teacherID>")
+def messagingStudentView(studentID, teacherID):
+    q = "SELECT messageID FROM messages WHERE studentID = " + studentID + " AND teacherID = " + teacherID
+    messages = Query(q)
+    a = []
+    for message in messages:
+        m = BPS.Message()
+        m.init(message)
+        a.append(m)
+    return render_template("MessageList.html", messages=a, student = s)
+
+@app.route("/Messages/<teacherID>/<studentID>")
+def messagingTeacherView(teacherID, studentID):
+    q = "SELECT messageID FROM messages WHERE studentID = " + studentID + " AND teacherID = " + teacherID
+    messages = Query(q)
+    a = []
+    for message in messages:
+        m = BPS.Message()
+        m.init(message)
+        a.append(m)
+    return render_template("MessageList.html", teachers=a, student = t)
 
 global t, s, p
 t = BPS.Teacher()

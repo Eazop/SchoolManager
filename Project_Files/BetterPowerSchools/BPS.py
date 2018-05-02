@@ -209,17 +209,18 @@ class Teacher:
 class Message:
     messageID = -1
     message = None
-    studentID = None
+    sendID = None
     teacherID = None
     sendDate = None
- 
+    sender = None
+
 	def initByAll(self, messageID, message, studentID, teacherID, sendDate):
 		self.messageID = messageID
 		self.message = message
 		self.studentID = studentID
 		self.teacherID = teacherID
 		self.sendDate = sendDate
-		
+
 	def initByID(self, messageID):
 		self.messageID = messageID
 		q = "SELECT * FROM messages WHERE messageID = " + str(messageID)
@@ -228,7 +229,7 @@ class Message:
 		self.studentID = c[2]
 		self.teacherID = c[3]
 		self.sendDate = c[4]
-		
+
     def sendMessage(self):
          Query("INSERT INTO messages (StudentID, TeacherID, Message, Time) VALUES ("+ self.studentID + ", " + self.teacherID + ", " + self.message + ", " + self.sendDate +")" )
 

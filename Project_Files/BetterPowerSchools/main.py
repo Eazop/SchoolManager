@@ -143,12 +143,6 @@ def logout():
     session.pop('logged_in', None)
     return redirect(url_for('loggedout'))
 
-#Example of creating a dynamic route. <name> is an argument
-#that is passed to the function invoked by the route
-@app.route('/name/<name>')
-def get_name(name):
-	return "Hello "+name
-
 @app.route('/Assignments')
 def assignmentList():
 	return render_template('AssignmentList.html', assignments = t.getAssignments())
@@ -224,10 +218,18 @@ def updateGrade():
     assignmentID = request.form['assignmentID']
     a = BPS.Assignment()
     a.initByID(assignmentID)
-    print("Not updated grade")
     a.updateGrade(request.form['Grade'])
-    print("Updated Grade")
     return redirect(url_for('List', courseNum =a.courseID, assignTitle=a.title))
+
+@app.route('/Messages', methods=['GET', 'POST'])
+def message():
+    message = BPS.Message()
+    message.message = request.form['Message']
+    message.teacherID = request.form['TeacherID']
+    message.studentID = request.form['StudentID']
+    now = datetime.datetime.now()
+    date = now.strftime("%Y-%m-%d %H:%M")
+    message.sendDate = date
 
 global t, s, p
 t = BPS.Teacher()

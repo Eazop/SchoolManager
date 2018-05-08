@@ -2,15 +2,30 @@
 {% block body %}
 <h1 class="title">Student Submissions</h1>
 <div class="profilebox">
+	<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Order By
+  </button>
+    <button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/ID/ASC'">ID Ascending</a>
+		<button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/ID/DESC'">ID Descending</a>
+    <button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/Name/ASC'">Last Name Ascending</a>
+		<button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/Name/DESC'">Last Name Descending</a>
+    <button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/Submission/ASC'">Submission Status Ascending</a>
+		<button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/Submission/DESC'">Submission Status Descending</a>
+</div>
+
+
 	<fieldset class="profilecreateform">
 	{% for x in range(0, total) %}
+	<div class="profilebox">
 	 	<p class="profilebox rhead" >Student ID: </p><p class="profilebox rbody">{{studentIDs[x]}}</p><br>
 	 	<p class="profilebox rhead">Name: </p><p class="profilebox rbody">{{nameList[x]}}</p><br>
 	 	<p class="profilebox rhead">Submission: </p><p class="profilebox rbody">{% if gradeList[x] %}{{gradeList[x]}} {% else %} "None Yet" {% endif %}</p><br>
 	 	<button onclick="location.href='/UpdateGrade/{{assignID[x]}}'" type="button" class="button">Grade Assignment</button>
 <br><br>
+</div>
 	{% endfor %}
 </div>
-</div>
+
 
 {% endblock %}

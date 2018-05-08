@@ -177,23 +177,44 @@ def assignmentAdd():
 
 #Lists all of the submissions for a given assignment by pulling all students enrolled
 #in the class then finding the assignments associated with them
-@app.route('/Courses/<courseNum>/<assignTitle>')
-def List(courseNum, assignTitle):
+@app.route('/Courses/<courseNum>/<assignTitle>/<sort>/<order>')
+def List(courseNum, assignTitle, sort, order):
     listID =[]
     nameList = []
     gradeList = []
     assignID = []
     x=0
-    temp = Query("SELECT * FROM students WHERE Course1 =" + str(courseNum) +" OR Course2 =" + str(courseNum) +" OR Course3 =" + str(courseNum) +" OR Course4 =" + str(courseNum) +" OR Course5 =" + str(courseNum) +" OR Course6 = " + str(courseNum))
-    for t in temp:
-        listID.append(t[0])
-        nameList.append(t[2] + " " + t[1])
-        temp2 = Query("SELECT assignmentID, Grade FROM assignments WHERE StudentID =" + str(t[0]) + " AND Title = \"" + assignTitle + "\"")
-        assignID.append(temp2[0][0])
-        gradeList.append(temp2[0][1])
-        x+=1
+    if sort == "ID":
+        temp = Query("SELECT * FROM students WHERE Course1 =" + str(courseNum) +" OR Course2 =" + str(courseNum) +" OR Course3 =" + str(courseNum) +" OR Course4 =" + str(courseNum) +" OR Course5 =" + str(courseNum) +" OR Course6 = " + str(courseNum) + " ORDER BY studentid " + order)
+        for t in temp:
+            listID.append(t[0])
+            nameList.append(t[2] + " " + t[1])
+            temp2 = Query("SELECT assignmentID, Grade FROM assignments WHERE StudentID =" + str(t[0]) + " AND Title = \"" + assignTitle + "\"")
+            assignID.append(temp2[0][0])
+            gradeList.append(temp2[0][1])
+            x+=1
+    elif sort == "Name":
+        temp = Query("SELECT * FROM students WHERE Course1 =" + str(courseNum) +" OR Course2 =" + str(courseNum) +" OR Course3 =" + str(courseNum) +" OR Course4 =" + str(courseNum) +" OR Course5 =" + str(courseNum) +" OR Course6 = " + str(courseNum) + " ORDER BY Lname " + order)
+        for t in temp:
+            listID.append(t[0])
+            nameList.append(t[2] + " " + t[1])
+            temp2 = Query("SELECT assignmentID, Grade FROM assignments WHERE StudentID =" + str(t[0]) + " AND Title = \"" + assignTitle + "\"")
+            assignID.append(temp2[0][0])
+            gradeList.append(temp2[0][1])
+            x+=1
+    elif sort == "Submission":
+        temp = Query("SELECT studentid, assignmentID, Grade FROM assignments WHERE Title = \"" + assignTitle + "\" AND courseid = " + courseNum + " ORDER BY Grade " + order)
+        for t in temp:
+            print(t)
+            listID.append(t[0])
+            assignID.append(t[1])
+            gradeList.append(t[2])
+            temp2 = Query("SELECT Fname, Lname FROM students WHERE StudentID =" + str(t[0]) )
+            nameList.append(temp2[0][0] +" " + temp2[0][1])
+            x+=1
 
-    return render_template('StudentAssignments.html', studentIDs = listID, nameList = nameList, gradeList = gradeList, assignID = assignID, total = x)
+    return render_template('StudentAssignments.html', studentIDs = listID, nameList = nameList, gradeList = gradeList, assignID = assignID, total = x, courseNum = courseNum, assignTitle = assignTitle)
+
 
 #Shows a page that is prepopulated with the information about a particular assignment
 #and allows the user to edit the values as desired
@@ -232,7 +253,7 @@ def updateGrade():
     a = BPS.Assignment()
     a.initByID(assignmentID)
     a.updateGrade(request.form['Grade'])
-    return redirect(url_for('List', courseNum =a.courseID, assignTitle=a.title))
+    return redirect(url_for('List', courseNum =a.courseID, assignTitle=a.title, sort="ID"))
 
 #Processing page for a successful message submission
 @app.route('/Sending', methods=['GET', 'POST'])

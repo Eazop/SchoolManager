@@ -1,18 +1,17 @@
 {% extends "layout.html" %}
 {% block body %}
 <h1 class="title">Student Submissions</h1>
-<div class="profilebox">
-	<div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	<div class="dropdown"><center>
+  <button class="btn btn-secondary dropdown-toggle button" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Order By
   </button>
-    <button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/ID/ASC'">ID Ascending</a>
-		<button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/ID/DESC'">ID Descending</a>
-    <button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/Name/ASC'">Last Name Ascending</a>
-		<button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/Name/DESC'">Last Name Descending</a>
-    <button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/Submission/ASC'">Submission Status Ascending</a>
-		<button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/Submission/DESC'">Submission Status Descending</a>
-</div>
+    <button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/ID/ASC'" class=button>ID Ascending</a>
+		<button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/ID/DESC'" class=button>ID Descending</a>
+    <button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/Name/ASC'" class=button>Last Name Ascending</a>
+		<button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/Name/DESC'" class=button>Last Name Descending</a>
+    <button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/Submission/ASC'" class=button>Submission Status Ascending</a>
+		<button onclick="location.href='/Courses/{{courseNum}}/{{assignTitle}}/Submission/DESC'" class=button>Submission Status Descending</a>
+</div></center>
 
 
 	<fieldset class="profilecreateform">

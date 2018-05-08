@@ -253,7 +253,7 @@ def updateGrade():
     a = BPS.Assignment()
     a.initByID(assignmentID)
     a.updateGrade(request.form['Grade'])
-    return redirect(url_for('List', courseNum =a.courseID, assignTitle=a.title, sort="ID"))
+    return redirect(url_for('List', courseNum =a.courseID, assignTitle=a.title, sort="ID", order="ASC"))
 
 #Processing page for a successful message submission
 @app.route('/Sending', methods=['GET', 'POST'])

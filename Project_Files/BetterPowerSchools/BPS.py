@@ -50,7 +50,7 @@ class Parent:
     currentCourses = []
     def init(self,parentID):
         self.parentID = parentID
-        q = "SELECT studentID FROM students WHERE parentID=" + ParentID
+        q = "SELECT studentID FROM students WHERE parentID=" + parentID
         q = Query(q)
         student = Student()
         student.init(q[0][0])

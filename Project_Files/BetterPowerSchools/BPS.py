@@ -252,3 +252,25 @@ def Query(query):
     l = cur.fetchall()
     db.close()
     return l
+
+class Node:
+    object = None
+    next = None
+
+class LinkedList:
+    head = None
+    tail = None
+
+    def add(self, n):
+        if head == None:
+            head = n
+            return
+        t = head
+        while t.next != None:
+            t = t.next
+        t.next = n
+        n = tail
+
+    
+    def deconstruct():
+        head = None

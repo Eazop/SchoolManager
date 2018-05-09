@@ -30,7 +30,7 @@ class Student:
     def sendMessage(self, message, teacherID):
         now = datetime.datetime.now()
         q = "INSERT INTO messages (StudentID, TeacherID, Message, Time) VALUES ("
-        q += str(self.studentID) + ", " + str(teacherID) + ", " + message + ", " + now.strftime("%Y-%m-%d %H:%M") + ")"
+        q += str(self.studentID) + ", " + str(teacherID) + ", \"" + message + "\" , \"" + now.strftime("%Y-%m-%d %H:%M") + "\")"
         m = Query(q)
 
     #Sets all values back to their default (this should be used for logging out)
@@ -162,6 +162,8 @@ class Assignment:
 class Teacher:
     teacherID = 0
     currentCourses = []
+    Fname = None
+    Lname = None
     def init(self,teachID):
         self.teacherID = teachID
         q ="Select CourseID from courses where TeacherID =" + str(self.teacherID)
@@ -170,7 +172,11 @@ class Teacher:
             c = Course()
             c.init(course[0])
             self.currentCourses.append(c)
-
+        q ="Select Fname, Lname from teachers where TeacherID =" + str(self.teacherID)
+        temp = Query(q)
+        for name in temp:
+            self.Fname = name[0]
+            self.Lname = name[1]
 #Adds a new assignment to the data base
     def submitAssignment(self, courseID, title, Description, DueDate):
         studentHolder = []
@@ -213,15 +219,15 @@ class Message:
     messageID = -1
     message = None
     sendID = None
-    teacherID = None
+    recipientID = None
     sendDate = None
     sender = None
 
-    def initByAll(self, messageID, message, studentID, teacherID, sendDate):
+    def initByAll(self, messageID, message, sendID, recipientID, sendDate):
         self.messageID = messageID
         self.message = message
-        self.studentID = studentID
-        self.teacherID = teacherID
+        self.sendID = sendID
+        self.recipientID = recipientID
         self.sendDate = sendDate
 
     def initByID(self, messageID):
@@ -229,18 +235,18 @@ class Message:
         q = "SELECT * FROM messages WHERE messageID = " + str(messageID)
         c = Query(q)
         self.message = c[0][1]
-        self.studentID = c[0][2]
-        self.teacherID = c[0][3]
+        self.sendID = c[0][2]
+        self.recipientID = c[0][3]
         self.sendDate = c[0][4]
 
     def sendMessage(self):
-         Query("INSERT INTO messages (StudentID, TeacherID, Message, Time) VALUES ("+ self.studentID + ", " + self.teacherID + ", " + self.message + ", " + self.sendDate +")" )
+         Query("INSERT INTO messages (SendID, RecipientID, Message, Time) VALUES ("+ self.sendID + ", " + self.recipientID + ", \"" + self.message + "\", \"" + self.sendDate +"\")" )
 
     def deconstruct(self):
         self.messageID = -1
         self.message = None
-        self.studentID = None
-        self.teacherID = None
+        self.sendID = None
+        self.recipientID = None
         self.sendDate = None
 
 

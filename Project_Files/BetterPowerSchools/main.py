@@ -320,7 +320,25 @@ def messagingTeacherView(teacherID, studentID):
         m = BPS.Message()
         m.init(message)
         a.append(m)
-    return render_template("MessageList.html", teachers=a, student = t)
+    return render_template("MessageList.html", teacher=teacherID, student = t, messages=a)
+
+@app.route("/Feed")
+def studentFeed():
+    assignmentList = []
+    q = "SELECT assignmentid FROM assignments WHERE studentID=" + str(s.studentID) + " ORDER BY DueDate"
+    q = Query(q)
+    for assignment in q:
+        a = BPS.Assignment()
+        a.initByID(assignment)
+        assignmentDueDate = a.dueDate.split("-")
+        now = datetime.datetime.now()
+        currentDate = now.strftime("%Y-%m-%d").split("-")
+
+        if int(assignmentDueDate[0]) > int(currentDate[0]) or ((int(assignmentDueDate[0]) == int(currentDate[0])) and int(assignmentDueDate[1]) > int(currentDate[1])) or ((int(assignmentDueDate[0]) == int(currentDate[0])) and int(assignmentDueDate[1]) == int(currentDate[1]) and int(assignmentDueDate[2]) >= int(currentDate[2])):
+
+            assignmentList.append(a)
+
+    return render_template("StudentFeed.html", assignments = assignmentList)
 
 # declares and initialzes the global variables to be used throughout the program.
 global t, s, p

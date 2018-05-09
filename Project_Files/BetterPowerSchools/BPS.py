@@ -116,7 +116,7 @@ class Assignment:
 #This initializes the assignment using just an assignmentID by pulling the rest
 # of the values from the database.
     def initByID(self, assignID):
-        self.assignmentID = assignID
+        self.assignmentID = assignID[0]
         db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
         cur = db.cursor()
         q = "SELECT * FROM assignments WHERE assignmentID = " + str(self.assignmentID)
@@ -253,24 +253,5 @@ def Query(query):
     db.close()
     return l
 
-class Node:
-    object = None
-    next = None
-
-class LinkedList:
-    head = None
-    tail = None
-
-    def add(self, n):
-        if head == None:
-            head = n
-            return
-        t = head
-        while t.next != None:
-            t = t.next
-        t.next = n
-        n = tail
-
-    
     def deconstruct():
         head = None

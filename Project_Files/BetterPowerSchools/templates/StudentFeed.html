@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1 class="title">Your Upcoming Assignments</h1>
+
+	<fieldset class="profilecreateform">
+	{% for assignment in assignments %}
+	<div class="profilebox">
+    <p class="profilebox rhead" > Due Date: </p><p class="profilebox rbody">{{assignment.dueDate}}</p><br>
+	 	<p class="profilebox rhead" > Assignment Title: </p><p class="profilebox rbody">{{assignment.title}}</p><br>
+	 	<p class="profilebox rhead">Description: </p><p class="profilebox rbody">{{assignment.description}}</p><br>
+	 	<p class="profilebox rhead">Course ID: </p><p class="profilebox rbody">{{assignment.courseID}}</p><br>
+
+<br><br>
+</div>
+	{% endfor %}
+</div>
+
+
+{% endblock %}

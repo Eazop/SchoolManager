@@ -12,7 +12,8 @@
 		<div class="navbar">
 		  	<a class="active" href="{{ url_for('home') }}">HOME</a>
 	  		<a href="{{ url_for('login') }}">LOG IN</a>
-	 		
+				<a class="active" href="{{ url_for('studentFeed') }}">FEED</a>
+
 	 		{% if session.logged_in %}
 	 		<a href="{{ url_for('logout') }}" style="text-align: right; float: right;">Log Out</a>
 	 		<a href="" style="text-align: right; float: right;">Account</a>

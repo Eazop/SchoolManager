@@ -173,7 +173,7 @@ def assignmentCourse(courseNum):
 def assignmentAdd():
     courseNum = request.form['courseNum']
     t.submitAssignment(int(request.form['courseNum']),request.form['Title'], request.form['Description'], request.form['DueDate'])
-    return redirect(url_for('assignmentCourse', courseNum = courseNum))
+    return redirect(url_for('re', courseNum = courseNum))
 
 #Lists all of the submissions for a given assignment by pulling all students enrolled
 #in the class then finding the assignments associated with them

@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1 class="title">Student Submissions</h1>
+	<fieldset class="profilecreateform">
+	<div class="profilebox">
+    <div class="profilebox" style="margin-bottom: 2%">
+    		<form action="{{ url_for('sendMessage') }}" method=post class=add-entry>
+            <fieldset class="profilecreateform">
+            <!-- <p class="s2">
+              <label class="l2">AssignmentID:</label>
+              <input class="p2" type=text size=15 name=AssignmentID>
+              </p> -->
+    					<p class="s2">
+    	          <label class="l2">Message Body</label><br>
+    	          <textarea rows="6" cols="50" class="p2" maxlength="120"  type=text name=body></textarea>
+    	         </p>
+              <p class="s2">
+              	<label class="l2">Recipient</label>
+              	<input type="text" name="recipient">
+                <input type="radio" name = "role" value="Teacher" checked>Teacher
+                <input type="radio" name = "role" value="Student" checked>Student
+              </p>
+              <input class="button" type=submit value="Send Message" style="margin-left: 0em">
+            </fieldset>
+          </form>
+          <br>
+        </div>
+
+    {% if session.role == "teacher" %}
+    {% for stud in students %}
+   	<p class="profilebox rhead" >Teacher Name: </p><p class="profilebox rbody">{{teacher.Fname}} {{teacher.Lname}}</p><br>
+	 	<p class="profilebox rhead">Student Name: </p><p class="profilebox rbody">{{stud.firstName}} {{stud.lastName}}</p><br>
+    <button onclick="" type="button" class="button">Open Conversation</button>
+    {% endfor %}
+    {% endif %}
+
+    {% if session.role == "student" %}
+    {% for teahcer in teachers %}
+   	<p class="profilebox rhead" >Teacher Name: </p><p class="profilebox rbody">{{teacher.Fname}} {{teacher.Lname}}</p><br>
+	 	<p class="profilebox rhead">Student Name: </p><p class="profilebox rbody">{{student.firstName}} {{student.lastName}}</p><br>
+    {% endfor %}
+    {% endif %}
+<br><br>
+</div>
+
+</div>
+
+
+{% endblock %}

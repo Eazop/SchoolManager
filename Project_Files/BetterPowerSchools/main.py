@@ -259,44 +259,42 @@ def updateGrade():
 @app.route('/Sending', methods=['GET', 'POST'])
 def sendMessage():
     message = BPS.Message()
-    message.message = request.form['Message']
-    message.teacherID = request.form['TeacherID']
-    message.studentID = request.form['StudentID']
+    message.message = request.form['body']
+    message.recipientID = request.form['recipient']
+    if session['role']=='student':
+        message.sendID = s.studentID
+    else:
+        message.sendID = t.teacherID
+    role = request.form['role']
     now = datetime.datetime.now()
     date = now.strftime("%Y-%m-%d %H:%M")
     message.sendDate = date
     message.sendMessage()
-    return redirect(url_for('messaging', teacherID = message.teacherID))
+    return redirect(url_for('messaging', userID = message.sendID))
 
 #The teacher's view for all conversations that they currently have going on
-@app.route("/Messages/<teacherID>")
-def messagingTeacher(teacherID):
-    q = "SELECT studentID FROM messages WHERE teacherID = " + TeacherID
-    m = Query(q)
-    a = []
-    for ID in m:
-        for stud in a:
-            if stud.studentID != ID:
-                student = BPS.Student()
-                student.init(ID)
-                a.append(student)
-                break
-    return render_template("MessageList.html", students=a, teacher = t)
-
-#The student's view for all ocnversations that they currently have going on
-@app.route("/Messages/<studentID>")
-def messagingStudent(studentID):
-    q = "SELECT teacherID FROM messages WHERE studentID = " + studentID
-    m = Query(q)
-    a = []
-    for ID in m:
-        for teach in a:
-            if stud.studentID != ID:
-                teacher = BPS.Teacher()
-                teacher.init(ID)
-                a.append(teacher)
-                break
-    return render_template("MessageList.html", teachers=a, student = t)
+@app.route("/Messages/<userID>")
+def messaging(userID):
+    if session['role'] == "teacher":
+        q = "SELECT DISTINCT recipientID FROM messages WHERE sendID = " + userID
+        m = Query(q)
+        a = []
+        for ID in m:
+            student = BPS.Student()
+            student.init(ID[0])
+            a.append(student)
+            break
+        return render_template("Conversations.html", students=a, teacher = t)
+    if session['role'] =="student":
+        q = "SELECT DISTINCT recipientID FROM messages WHERE sendID = " + userID
+        m = Query(q)
+        a = []
+        for ID in m:
+            teacher = BPS.Teacher()
+            teacher.init(ID)
+            a.append(teacher)
+            break
+        return render_template("Conversations.html", teachers=a, student = s)
 
 #Shows all messages that were sent in a conversation as seen by a student.
 @app.route("/Messages/<studentID>/<teacherID>")
@@ -339,6 +337,8 @@ def studentFeed():
             assignmentList.append(a)
 
     return render_template("StudentFeed.html", assignments = assignmentList)
+
+
 
 # declares and initialzes the global variables to be used throughout the program.
 global t, s, p

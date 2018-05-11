@@ -38,6 +38,9 @@
   	{% for assignment in assignments %}
   	 	<p class="profilebox rhead" >Title: </p><p class="profilebox rbody">{{assignment.title}}</p><br>
   	 	<p class="profilebox rhead">Description: </p><p class="profilebox rbody">{{assignment.description}}</p><br>
+			{% if session.role == "student" %}
+			<p class="profilebox rhead">Grade: </p><p class="profilebox rbody">{% if assignment.grade %}{{assignment.grade}} {% else %} None Yet {% endif %}</p><br>
+			{% endif %}
   	 	<!--<p class="profilebox rhead">Grades: </p><p class="profilebox rbody">{% if assignment.grade %}{{assignment.grade}} {% else %} "None Yet" {% endif %}</p>-->
   	 	{% if session.role == "teacher" %}
   		<button onclick="location.href='/Courses/{{courseNum}}/{{assignment.title}}/ID/ASC'" type="button" class="button">View Submissions</button>

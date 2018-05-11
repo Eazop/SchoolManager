@@ -158,12 +158,13 @@ def logout():
 @app.route('/Courses/<courseNum>', methods=['GET', 'POST'])
 def assignmentCourse(courseNum):
         a = []
-        assignments = Query("SELECT DISTINCT Title, Description, DueDate FROM assignments WHERE CourseID =" + str(courseNum))
+        assignments = Query("SELECT DISTINCT Title, Description, DueDate, Grade FROM assignments WHERE CourseID =" + str(courseNum))
         for assignment in assignments:
                 temp = BPS.Assignment()
                 temp.title = assignment[0]
                 temp.description = assignment[1]
                 temp.dueDate = assignment[2]
+                temp.grade = assignment[3]
                 a.append(temp)
 
         return render_template('Assignments.html', assignments = a, courseNum = courseNum)
@@ -324,7 +325,7 @@ def messagingTeacherView(teacherID, studentID):
 @app.route("/Feed")
 def studentFeed():
     assignmentList = []
-    q = "SELECT assignmentid FROM assignments WHERE studentID=" + str(s.studentID) + " ORDER BY DueDate"
+    q = "SELECT assignmentid FROM assignments WHERE studentID= " + str(s.studentID) + " ORDER BY DueDate"
     q = Query(q)
     for assignment in q:
         a = BPS.Assignment()

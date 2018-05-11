@@ -11,16 +11,15 @@
     {% if session.role == "parent" %}
       <h1 class="title">Parent Home Screen</h1>
       <!--this is an example, put your stuff into this area for the teacher home screen-->
+      <div class=profilebox>
       <ul>
-        
-              <p><p align="center"><font size = "6">
-                <b><br><a href="{{ url_for('Schedule') }}">view student schedule</a></b></br>
-                <b><br><a href="">View Assigments</a></b></br>
-                <b><br><a href="">Messages</a></b></br>
-                </p>
-        
+          <h2 class="subtitle"><a href="{{ url_for('Schedule') }}">View Student Schedule</a></h2>
+          <h2 class="subtitle"><a href="">View Assigments</a></h2>
+          <h2 class="subtitle"><a href="">Messages</a></h2>
+          </p>
+  
       </ul>
-
+    </div>
 {% endif %}
 {% endif %}
    

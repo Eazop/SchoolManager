@@ -52,17 +52,15 @@ class Parent:
         self.parentID = parentID
         q = "SELECT studentID FROM students WHERE parentID=" + parentID
         q = Query(q)
-        student = Student()
-        student.init(q[0][0])
+        self.student = Student()
+        self.student.init(q[0][0])
 
     def getStudent(self):
-        return studentID
+        return self.student.studentID
 
     #Sets all values back to their default (this should be used for logging out)
     def deconstruct(self):
-        self.firstName = None
-        self.lastName = None
-        self.studentID = None
+        self.student = None
         self.parentID = None
         self.courses = []
 

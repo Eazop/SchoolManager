@@ -1,7 +1,7 @@
 from flask import Flask, request, session, g, redirect, url_for, abort, \
  render_template, flash
 import datetime
-
+from flask_socketio import SocketIO, send,emit
 
 from jinja2 import Template
 import pymysql
@@ -27,7 +27,7 @@ SECRET_KEY='development key',
 USERNAME='',
 PASSWORD=''
 ))
-
+socketio=SocketIO(app)
 def connect_db():
 	db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
 	return db
@@ -158,13 +158,12 @@ def logout():
 @app.route('/Courses/<courseNum>', methods=['GET', 'POST'])
 def assignmentCourse(courseNum):
         a = []
-        assignments = Query("SELECT DISTINCT Title, Description, DueDate, Grade FROM assignments WHERE CourseID =" + str(courseNum))
+        assignments = Query("SELECT DISTINCT Title, Description, DueDate FROM assignments WHERE CourseID =" + str(courseNum))
         for assignment in assignments:
                 temp = BPS.Assignment()
                 temp.title = assignment[0]
                 temp.description = assignment[1]
                 temp.dueDate = assignment[2]
-                temp.grade = assignment[3]
                 a.append(temp)
 
         return render_template('Assignments.html', assignments = a, courseNum = courseNum)
@@ -244,7 +243,6 @@ def Delete(courseNum, assignTitle):
 #Brings up a small form for the teacher to give the student a grade
 @app.route('/UpdateGrade/<assignmentID>')
 def updateGradeHTML(assignmentID):
-    print(assignmentID)
     return render_template("Grading.html", assignmentID=assignmentID)
 
 #Processing page for a successful grade update
@@ -325,12 +323,11 @@ def messagingTeacherView(teacherID, studentID):
 @app.route("/Feed")
 def studentFeed():
     assignmentList = []
-    q = "SELECT assignmentid FROM assignments WHERE studentID= " + str(s.studentID) + " ORDER BY DueDate"
+    q = "SELECT assignmentid FROM assignments WHERE studentID=" + str(s.studentID) + " ORDER BY DueDate"
     q = Query(q)
     for assignment in q:
         a = BPS.Assignment()
-        print(assignment)
-        a.initByID(assignment[0])
+        a.initByID(assignment)
         assignmentDueDate = a.dueDate.split("-")
         now = datetime.datetime.now()
         currentDate = now.strftime("%Y-%m-%d").split("-")
@@ -341,6 +338,15 @@ def studentFeed():
 
     return render_template("StudentFeed.html", assignments = assignmentList)
 
+@socketio.on('message', namespace='/chat')
+def handleMessage(msg):
+#print message just send and received
+
+    print('Message: ' + msg)
+    send(msg,broadcast=True)
+
+
+
 
 
 # declares and initialzes the global variables to be used throughout the program.
@@ -349,4 +355,5 @@ t = BPS.Teacher()
 s = BPS.Student()
 p = BPS.Parent()
 if __name__ == '__main__':
-	app.run(host='127.0.0.1', port=8080, debug=True)
+    socketio.run(app(host='127.0.0.1', port=8080, debug=True))
+

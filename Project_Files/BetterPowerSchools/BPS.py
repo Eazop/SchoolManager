@@ -48,13 +48,31 @@ class Parent:
 
     teacherID = 0
     currentCourses = []
-    def init(self,parentID):
-        self.parentID = parentID
-        q = "SELECT studentID FROM students WHERE parentID=" + parentID
-        q = Query(q)
-        student = Student()
-        student.init(q[0][0])
-
+    '''
+     Suppose to setup a link between parent and student to show student schedule couldnt get it to properly display information 
+     below method is a workaround for now
+      def init(self,parentID):
+          self.parentID = parentID
+          q = "SELECT studentID FROM students WHERE parentID=" + parentID
+          q = Query(q)
+          student = Student()
+          student.init(q[0][0])    
+         
+'''    
+    
+    def init(self, studentID):
+        q = Query("SELECT * FROM students WHERE studentID = " + str(studentID))
+        self.studentID = q[0][0]
+        self.firstName = q[0][1]
+        self.lastName = q[0][2]
+        self.parentID = q[0][3]
+        for x in range(4, 10):
+            if q[0][x] :
+                c = Course()
+                c.init(q[0][x])
+                self.courses.append(c)
+    
+    
     def getStudent(self):
         return studentID
 
@@ -116,21 +134,19 @@ class Assignment:
 #This initializes the assignment using just an assignmentID by pulling the rest
 # of the values from the database.
     def initByID(self, assignID):
-        self.assignmentID = assignID
-
+        self.assignmentID = assignID[0]
         db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
         cur = db.cursor()
         q = "SELECT * FROM assignments WHERE assignmentID = " + str(self.assignmentID)
         cur.execute(q)
         l = cur.fetchall()
-        for assignment in l:
-            self.studentID = assignment[1]
-            self.description = assignment[2]
-            self.courseID = assignment[3]
-            self.dueDate = assignment[4]
-            if(assignment[5] != 'null'):
-                self.grade = assignment[5]
-            self.title = assignment[6]
+        self.studentID = l[0][1]
+        self.description =l[0][2]
+        self.courseID = l[0][3]
+        self.dueDate = l[0][4]
+        if(l[0][5] != 'null'):
+            self.grade = l[0][5]
+        self.title = l[0][6]
         db.close()
 
 #This initializes the assignment using given variables. This should only be used
@@ -242,7 +258,7 @@ class Message:
         self.sendDate = c[0][4]
 
     def sendMessage(self):
-         Query("INSERT INTO messages (SendID, RecipientID, Message, Time) VALUES ("+ self.sendID + ", " + self.recipientID + ", \"" + self.message + "\", \"" + self.sendDate +"\")" )
+        Query("INSERT INTO messages (SendID, RecipientID, Message, Time) VALUES ("+ self.sendID + ", " + self.recipientID + ", \"" + self.message + "\", \"" + self.sendDate +"\")" )
 
     def deconstruct(self):
         self.messageID = -1

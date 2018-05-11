@@ -116,19 +116,21 @@ class Assignment:
 #This initializes the assignment using just an assignmentID by pulling the rest
 # of the values from the database.
     def initByID(self, assignID):
-        self.assignmentID = assignID[0]
+        self.assignmentID = assignID
+
         db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
         cur = db.cursor()
         q = "SELECT * FROM assignments WHERE assignmentID = " + str(self.assignmentID)
         cur.execute(q)
         l = cur.fetchall()
-        self.studentID = l[0][1]
-        self.description =l[0][2]
-        self.courseID = l[0][3]
-        self.dueDate = l[0][4]
-        if(l[0][5] != 'null'):
-            self.grade = l[0][5]
-        self.title = l[0][6]
+        for assignment in l:
+            self.studentID = assignment[1]
+            self.description = assignment[2]
+            self.courseID = assignment[3]
+            self.dueDate = assignment[4]
+            if(assignment[5] != 'null'):
+                self.grade = assignment[5]
+            self.title = assignment[6]
         db.close()
 
 #This initializes the assignment using given variables. This should only be used

@@ -243,6 +243,7 @@ def Delete(courseNum, assignTitle):
 #Brings up a small form for the teacher to give the student a grade
 @app.route('/UpdateGrade/<assignmentID>')
 def updateGradeHTML(assignmentID):
+    print(assignmentID)
     return render_template("Grading.html", assignmentID=assignmentID)
 
 #Processing page for a successful grade update
@@ -327,7 +328,8 @@ def studentFeed():
     q = Query(q)
     for assignment in q:
         a = BPS.Assignment()
-        a.initByID(assignment)
+        print(assignment)
+        a.initByID(assignment[0])
         assignmentDueDate = a.dueDate.split("-")
         now = datetime.datetime.now()
         currentDate = now.strftime("%Y-%m-%d").split("-")

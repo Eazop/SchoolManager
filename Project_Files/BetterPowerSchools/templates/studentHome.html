@@ -54,6 +54,46 @@
           </tr>
           {% endfor %}
         </table>
+        <p>      
+       
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> 
+        
+  <script type="text/javascript">
+$(document).ready(function() {
+	
+	
+	
+    namespace = '/chat';;
+	
+
+	var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+
+	socket.on('connect', function() {
+		socket.send( 'Student has connected!');
+	});
+
+	socket.on('message', function(msg) {
+		$("#messages").append('<li>'+msg+'</li>');
+		console.log('Received message');
+	});
+
+	$('#sendbutton').on('click', function() {
+		socket.send($('#myMessage').val());
+		$('#myMessage').val('');
+	});
+
+});
+</script>
+
+
+</p>
+<ul id="messages"></ul>
+<input type="text" id="myMessage">
+<button id="sendbutton">Send</button>     
+        
+        
+        
     {% endif %}
   {% endif %}
 {% endblock %}

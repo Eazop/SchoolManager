@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1 class="title">Account</h1>
+<h2 class="subtitle">Manage Account</h2>
+<div class="profilebox">
+      <form action="{{ url_for('accountUpdate') }}" method=post class=add-entry>
+        <fieldset class="profilecreateform">
+					<p class="s2">
+	          <label class="l2">Edit Password:</label>
+			  {% if session.role == "teacher" %}
+	          <input class="p2" type=text size=15 name=Password placeholder="{{teacherID.password}}">
+			  {% if session.role == "student" %}
+	          <input class="p2" type=text size=15 name=Password placeholder="{{studentID.password}}">
+			  {% if session.role == "parent" %}
+	          <input class="p2" type=text size=15 name=Password placeholder="{{parentID.password}}">
+					</p>
+          <input class="button" type=submit value="Update Account" style="margin-left: 0em">
+        </fieldset>
+      </form>
+      </div>
+{% endblock %}

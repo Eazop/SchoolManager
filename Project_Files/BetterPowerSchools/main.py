@@ -1,7 +1,7 @@
 from flask import Flask, request, session, g, redirect, url_for, abort, \
  render_template, flash
 import datetime
-from flask_socketio import SocketIO, send,emit
+# from flask_socketio import SocketIO, send,emit
 
 from jinja2 import Template
 import pymysql
@@ -27,7 +27,7 @@ SECRET_KEY='development key',
 USERNAME='',
 PASSWORD=''
 ))
-socketio=SocketIO(app)
+# socketio=SocketIO(app)
 def connect_db():
 	db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
 	return db
@@ -158,12 +158,13 @@ def logout():
 @app.route('/Courses/<courseNum>', methods=['GET', 'POST'])
 def assignmentCourse(courseNum):
         a = []
-        assignments = Query("SELECT DISTINCT Title, Description, DueDate FROM assignments WHERE CourseID =" + str(courseNum))
+        assignments = Query("SELECT DISTINCT Title, Description, DueDate, Grade FROM assignments WHERE CourseID =" + str(courseNum))
         for assignment in assignments:
                 temp = BPS.Assignment()
                 temp.title = assignment[0]
                 temp.description = assignment[1]
                 temp.dueDate = assignment[2]
+                temp.grade = assignment[3]
                 a.append(temp)
 
         return render_template('Assignments.html', assignments = a, courseNum = courseNum)
@@ -363,4 +364,4 @@ s = BPS.Student()
 p = BPS.Parent()
 if __name__ == '__main__':
     # socketio.run(app(host='127.0.0.1', port=8080, debug=True))
-    app(host='127.0.0.1', port=8080, debug=True)
+    app.run(host='127.0.0.1', port=8080, debug=True)

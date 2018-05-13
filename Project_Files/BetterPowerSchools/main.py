@@ -331,9 +331,15 @@ def studentFeed():
         a = BPS.Assignment()
         print(assignment)
         a.initByID(assignment[0])
-        assignmentDueDate = a.dueDate.split("-")
+        if a.dueDate[2] == "-":
+            assignmentDueDate = a.dueDate.split("-")
+        elif a.dueDate[2] == "/":
+            assignmentDueDate = a.dueDate.split("/")
+
+        print(assignmentDueDate)
         now = datetime.datetime.now()
-        currentDate = now.strftime("%Y-%m-%d").split("-")
+        currentDate = now.strftime("%m-%d-%Y").split("-")
+        print(currentDate)
 
         if int(assignmentDueDate[0]) > int(currentDate[0]) or ((int(assignmentDueDate[0]) == int(currentDate[0])) and int(assignmentDueDate[1]) > int(currentDate[1])) or ((int(assignmentDueDate[0]) == int(currentDate[0])) and int(assignmentDueDate[1]) == int(currentDate[1]) and int(assignmentDueDate[2]) >= int(currentDate[2])):
 

@@ -250,7 +250,7 @@ class Message:
 
 
 def Query(query):
-    db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
+    db = pymysql.connect(host='127.0.0.1', user='BPS', password='betterpowerschools', db='better_power_schools')
     cur = db.cursor()
     cur.execute(query)
     db.commit()

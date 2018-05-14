@@ -10,7 +10,7 @@ import BPS
 #Just queries the database for whatever information you give it
 #NOTE: It returns a tuple since it is a fetchall
 def Query(query):
-    db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
+    db = pymysql.connect(host='127.0.0.1', user='BPS', password='betterpowerschools', db='better_power_schools')
     cur = db.cursor()
     cur.execute(query)
     db.commit()
@@ -29,7 +29,7 @@ PASSWORD=''
 ))
 # socketio=SocketIO(app)
 def connect_db():
-	db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
+	db = pymysql.connect(host='127.0.0.1', user='BPS', password='betterpowerschools', db='better_power_schools')
 	return db
 
 #Dashboard for the application
@@ -72,7 +72,7 @@ def Schedule():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	error = None
-	db = pymysql.connect(host='104.196.175.51', user='BPS', password='betterpowerschools', db='better_power_schools')
+	db = pymysql.connect(host='127.0.0.1', user='BPS', password='betterpowerschools', db='better_power_schools')
 	if request.method == 'POST':
 		stringusername = None
 		stringpassword = None
